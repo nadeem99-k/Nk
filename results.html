@@ -42,6 +42,10 @@
                 <span>Session: </span>
                 <strong id="resultsSessionId">Loading...</strong>
             </div>
+            <div class="stat-item">
+                <span class="stat-label">Storage Use</span>
+                <span class="stat-value" id="storageUse">0.00 MB (0%)</span>
+            </div>
             <div class="results-live">
                 <span class="live-dot"></span>
                 <span>LIVE FEED</span>
@@ -89,7 +93,12 @@
 
     <!-- WAITING STATE -->
     <div class="waiting-state" id="waitingState">
-        <div class="radar-anim">
+        <div class="radar-wrap">
+            <div class="radar"></div>
+            <div class="radar-dot"></div>
+            <div id="statusLabel"
+                style="position:absolute; bottom:-30px; left:50%; transform:translateX(-50%); width:max-content; font-size:0.9rem; color:var(--primary); font-weight:600;">
+                Waiting for target...</div>
             <div class="radar-ring r1"></div>
             <div class="radar-ring r2"></div>
             <div class="radar-ring r3"></div>
