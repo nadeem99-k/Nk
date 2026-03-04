@@ -1689,6 +1689,7 @@ body {
     right: -10px;
   }
 }
+
 @media (max-width: 480px) {
   .themes-grid {
     grid-template-columns: 1fr;
@@ -1722,4 +1723,126 @@ body {
 
 body {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- FORCE JOIN GATE ---------- */
+.join-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(6, 8, 16, 0.95);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease;
+}
+
+.join-gate-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.join-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), var(--shadow-glow);
+  transform: translateY(30px) scale(0.9);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.join-gate-overlay.active .join-card {
+  transform: translateY(0) scale(1);
+}
+
+.join-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 2.5rem;
+  box-shadow: 0 0 30px rgba(37, 211, 102, 0.4);
+}
+
+.join-card h2 {
+  font-family: var(--font-2);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.join-card p {
+  font-size: 0.95rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.join-link-box {
+  margin-bottom: 30px;
+}
+
+.btn-join {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  background: #25d366;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-join:hover {
+  background: #20bd5a;
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+}
+
+.join-sub {
+  font-size: 0.8rem !important;
+  color: var(--text-3) !important;
+  margin-bottom: 15px !important;
+}
+
+.btn-verify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-verify:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--accent);
 }

@@ -331,6 +331,27 @@
         <span id="toastMsg">Link copied!</span>
     </div>
 
+    <!-- FORCE JOIN GATE -->
+    <div class="join-gate-overlay" id="joinGate">
+        <div class="join-card">
+            <div class="join-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <h2>Join Our Community</h2>
+            <p>To use <b>CemraHack</b>, you must follow our official channel for latest updates and support.</p>
+            <div class="join-link-box">
+                <a href="https://whatsapp.com/channel/0029Vb7x2fNATRSsiwgQrF3N" target="_blank" class="btn-join"
+                    onclick="markJoined()">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    Follow Official Channel
+                </a>
+            </div>
+            <p class="join-sub">After following, click the button below to continue.</p>
+            <button class="btn-verify" onclick="verifyJoin()">
+                <i class="fa-solid fa-check-double"></i>
+                I Have Joined
+            </button>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 

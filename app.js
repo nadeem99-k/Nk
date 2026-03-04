@@ -71,7 +71,41 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   animateCounter('statSessions', 0, Math.floor(Math.random() * 40 + 10), 1200);
   animateCounter('statCaptures', 0, Math.floor(Math.random() * 300 + 80), 1400);
+
+  // Initialize Force Join Gate
+  setTimeout(checkJoinStatus, 1500);
 });
+
+// ---- Force Join Logic ----
+function checkJoinStatus() {
+  const joined = localStorage.getItem('nk_team_joined');
+  const gate = document.getElementById('joinGate');
+  if (!joined && gate) {
+    gate.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function markJoined() {
+  // This is called when they click the WhatsApp link
+  localStorage.setItem('nk_team_clicked_join', 'true');
+}
+
+function verifyJoin() {
+  const clicked = localStorage.getItem('nk_team_clicked_join');
+  if (clicked) {
+    localStorage.setItem('nk_team_joined', 'true');
+    const gate = document.getElementById('joinGate');
+    if (gate) {
+      gate.classList.remove('active');
+      document.body.style.overflow = '';
+      showToast('Welcome to CemraHack!');
+      setStatus('Channel joined! You can now use all features.', 'success');
+    }
+  } else {
+    showToast('Please click "Follow Official Channel" first!');
+  }
+}
 
 // ---- Generate random session ID ----
 function generateSession() {
