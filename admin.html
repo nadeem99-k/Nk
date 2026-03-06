@@ -225,6 +225,133 @@
         .auth-form .btn-primary {
             width: 100%;
         }
+
+        /* New UI Additions */
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+        }
+
+        .modal-field {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .btn-trash-sweep:hover {
+            background: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .admin-dashboard {
+                padding: 100px 15px 30px;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .admin-header .action-btns {
+                width: 100%;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .search-box,
+            .search-box input {
+                width: 100% !important;
+            }
+
+            .admin-header .action-btns .btn-primary,
+            .admin-header .action-btns .btn-delete {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .admin-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card .value {
+                font-size: 1.3rem;
+            }
+
+            /* Hide table on very small screens or switch to cards */
+            .admin-table-wrap {
+                background: transparent;
+                border: none;
+                border-radius: 0;
+            }
+
+            .admin-table thead {
+                display: none;
+            }
+
+            .admin-table,
+            .admin-table tbody,
+            .admin-table tr,
+            .admin-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .admin-table tr {
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+                margin-bottom: 15px;
+                padding: 15px;
+            }
+
+            .admin-table td {
+                border: none;
+                padding: 8px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right;
+            }
+
+            .admin-table td::before {
+                content: attr(data-label);
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                opacity: 0.5;
+                text-align: left;
+            }
+
+            .action-btns {
+                justify-content: flex-end;
+                margin-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                padding-top: 12px;
+            }
+
+            .auth-form {
+                padding: 25px;
+            }
+        }
     </style>
 </head>
 
@@ -276,9 +403,24 @@
                 </h1>
                 <p style="opacity: 0.6; margin-top: 5px;">Manage all active capture sessions and targets.</p>
             </div>
-            <button class="btn-primary" onclick="refreshData()">
-                <i class="fa-solid fa-sync"></i> Refresh
-            </button>
+            <div class="action-btns">
+                <div class="search-box" style="position: relative;">
+                    <i class="fa-solid fa-search"
+                        style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
+                    <input type="text" id="adminSearch" placeholder="Search Session/IP..." oninput="filterSessions()"
+                        style="padding: 12px 20px 12px 45px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; width: 250px;">
+                </div>
+                <button class="btn-sm btn-delete" onclick="deleteAllSessions()" style="padding: 12px 20px;">
+                    <i class="fa-solid fa-trash-sweep"></i> Clear All
+                </button>
+                <button class="btn-sm btn-view" onclick="addSampleData()"
+                    style="padding: 12px 20px; background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #22c55e;">
+                    <i class="fa-solid fa-vial"></i> Add Samples
+                </button>
+                <button class="btn-primary" onclick="refreshData()" style="padding: 12px 20px;">
+                    <i class="fa-solid fa-sync"></i> Refresh
+                </button>
+            </div>
         </div>
 
         <div class="admin-stats">
@@ -309,9 +451,10 @@
                 <thead>
                     <tr>
                         <th>Session ID</th>
-                        <th>Theme</th>
-                        <th>Target Status</th>
-                        <th>Captures</th>
+                        <th>IP Address</th>
+                        <th>Device / Theme</th>
+                        <th>Status</th>
+                        <th>Photos</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -319,6 +462,27 @@
                     <!-- Rows injected via JS -->
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- DETAILS MODAL -->
+    <div id="detailsModal" class="auth-gate admin-hidden"
+        style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);">
+        <div class="auth-form" style="max-width: 600px; text-align: left; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 25px;">
+                <h2 style="margin: 0;">Target <span class="gradient-text">Full Data</span></h2>
+                <button class="btn-sm" onclick="closeModal()"
+                    style="background: rgba(255,255,255,0.1); border: none;"><i class="fa-solid fa-times"></i></button>
+            </div>
+
+            <div id="modalContent" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.9rem;">
+                <!-- Content injected via JS -->
+            </div>
+
+            <div style="margin-top: 30px; display: flex; gap: 10px;">
+                <button class="btn-primary" style="flex: 1;" onclick="closeModal()">Close Details</button>
+                <button id="modalViewBtn" class="btn-secondary" style="flex: 1;">View Photos</button>
+            </div>
         </div>
     </div>
 

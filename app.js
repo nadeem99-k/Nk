@@ -24,13 +24,13 @@ const THEME_NAMES = {
   freedata: 'Free Mobile Data',
   giftcard: 'Gift Card Reward',
   lucky: 'Lucky Winner',
-  video: 'Video Verification',
+  tiktok_likes: 'TikTok Likes App',
   whatsapp: 'WhatsApp Verify',
-  google: 'Security Check',
+  tiktok_followers: 'TikTok Followers',
   instagram: 'Instagram Offer',
-  bank: 'Bank Verification',
-  speedtest: 'Speed Test App',
-  music: 'Free Music App'
+  ramzan: 'Ramzan Special Offer',
+  eid: 'Eid Gift Pakistan',
+  pakistan: 'Pakistan Reward'
 };
 
 // ---- State ----

