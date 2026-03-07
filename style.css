@@ -500,6 +500,48 @@ body {
   letter-spacing: 1px;
 }
 
+/* Telegram Config Styles */
+.tg-config {
+  background: rgba(0, 136, 204, 0.05);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgba(0, 136, 204, 0.3);
+  margin-top: 4px;
+}
+
+.tg-inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.tg-inputs input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.tg-inputs input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.tg-help {
+  display: block;
+  font-size: 0.7rem;
+  color: #0088cc;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
 .session-display {
   display: flex;
   align-items: center;

